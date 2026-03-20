@@ -4,13 +4,60 @@ from datetime import datetime
 import pandas as pd
 import streamlit as st
 from openpyxl import load_workbook
+import json
+import gspread
+from google.oauth2.service_account import Credentials
 
 # ======================================================
 # CONFIGURACIÓN
 # ======================================================
 st.set_page_config(page_title="Registro de ventas", page_icon="🧾", layout="centered")
 
-RUTA_ARCHIVO = Path(r"C:\Users\vamon\Documents\Aplicación registro ventas\completos_app_1.1\ventas_historicas.xlsx")
+SCOPES = [
+    "https://www.googleapis.com/auth/spreadsheets",
+    "https://www.googleapis.com/auth/drive"
+]
+
+SHEET_ID = "11yoIjPuw6v2LxOZ2Hmbg3BxVv-Qzn-jISOxNKTMjO_I"
+NOMBRE_HOJA = "Ventas"
+
+
+@st.cache_data(ttl=300)
+def cargar_datos():
+    creds_dict = json.loads(st.secrets["gcp_service_account"]["json"])
+    creds = Credentials.from_service_account_info(creds_dict, scopes=SCOPES)
+    client = gspread.authorize(creds)
+
+    spreadsheet = client.open_by_key(SHEET_ID)
+
+    ventas = pd.DataFrame(
+        spreadsheet.worksheet("Ventas").get_all_records()
+    )
+
+    precios = pd.DataFrame(
+        spreadsheet.worksheet("Precios").get_all_records()
+    )
+
+    return ventas, precios
+
+
+st.title("Registro de ventas")
+
+try:
+    ventas, precios = cargar_datos()
+
+    st.success("Conexión exitosa con Google Sheets")
+
+    st.subheader("Ventas")
+    st.dataframe(ventas, use_container_width=True)
+
+    st.subheader("Precios")
+    st.dataframe(precios, use_container_width=True)
+
+except Exception as e:
+    st.error("No se pudo cargar la Google Sheet")
+    st.exception(e)
+
 HOJA_VENTAS = "Ventas"
 HOJA_PRECIOS = "Precios"
 
