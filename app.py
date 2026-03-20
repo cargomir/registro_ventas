@@ -315,22 +315,24 @@ with st.expander("💰 Consultar precios vigentes"):
     df_precios_mostrar = pd.DataFrame({
         "Producto": [
             "Promoción completo + bebida",
+            "Completo solo",
             "Bebida sola",
-            "Té solo",
             "Café solo",
-            "Completo solo"
+            "Té solo"
         ],
         "Precio": [
             precios["promocion_completo_bebida"],
-            precios["bebida_sola"],
-            precios["te_solo"],
-            precios["cafe_solo"],
             precios["completo_solo"],
+            precios["bebida_sola"],
+            precios["cafe_solo"],
+            precios["te_solo"],            
         ]
     })
 
     st.dataframe(
-        df_precios_mostrar,
+        df_precios_mostrar.style.format({
+            "Precio": lambda x: f"${x:,.0f}".replace(",", ".")
+        }),
         use_container_width=True,
         hide_index=True
     )
