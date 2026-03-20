@@ -3,6 +3,8 @@ from datetime import datetime
 import pandas as pd
 import streamlit as st
 import gspread
+from datetime import datetime
+from zoneinfo import ZoneInfo
 
 # ======================================================
 # CONFIGURACIÓN
@@ -127,7 +129,7 @@ def guardar_venta(
     cantidad_completos,
     precios,
 ):
-    ahora = datetime.now()
+    ahora = datetime.now(ZoneInfo("America/Santiago"))
     fecha = ahora.strftime("%Y-%m-%d")
     hora = ahora.strftime("%H:%M:%S")
 
@@ -171,8 +173,7 @@ except Exception as e:
     st.stop()
 
 with st.form("formulario_venta", clear_on_submit=True):
-    st.markdown("**Nombre comprador**")
-    nombre_comprador = st.text_input("")
+    nombre_comprador = st.text_input("NOMBRE COMPRADOR")
 
     col1, col2 = st.columns(2)
 
