@@ -164,7 +164,10 @@ def guardar_venta(
 # ======================================================
 # INTERFAZ
 # ======================================================
-st.title("🧾 Registro de ventas")
+st.markdown(
+    "<h1 style='color:#FF5733;'>🧾 Registro de ventas</h1>",
+    unsafe_allow_html=True
+)
 
 try:
     precios = leer_precios()
