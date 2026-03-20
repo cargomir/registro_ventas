@@ -171,7 +171,7 @@ except Exception as e:
     st.stop()
 
 with st.form("formulario_venta", clear_on_submit=True):
-    st.markdown("### **Nombre comprador**")
+    st.markdown("## **Nombre comprador**")
     nombre_comprador = st.text_input("")
 
     col1, col2 = st.columns(2)
