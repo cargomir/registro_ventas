@@ -171,7 +171,8 @@ except Exception as e:
     st.stop()
 
 with st.form("formulario_venta", clear_on_submit=True):
-    nombre_comprador = st.text_input("Nombre comprador")
+    st.markdown("### **Nombre comprador**")
+    nombre_comprador = st.text_input("")
 
     col1, col2 = st.columns(2)
 
@@ -318,7 +319,7 @@ with st.expander("💰 Consultar precios vigentes"):
             "Completo solo",
             "Bebida sola",
             "Café solo",
-            "Té solo"
+            "Té solo",
         ],
         "Precio": [
             precios["promocion_completo_bebida"],
