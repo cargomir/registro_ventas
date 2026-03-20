@@ -285,13 +285,6 @@ with st.expander("📊 Resumen de ventas"):
                 pd.to_numeric(df_ventas["cantidad_bebidas_solas"], errors="coerce").fillna(0).sum(),
                 pd.to_numeric(df_ventas["cantidad_cafes_solos"], errors="coerce").fillna(0).sum(),
                 pd.to_numeric(df_ventas["cantidad_te_solos"], errors="coerce").fillna(0).sum(),
-            ],
-            "Precio unitario": [
-                precios["promocion_completo_bebida"],
-                precios["completo_solo"],
-                precios["bebida_sola"],
-                precios["cafe_solo"],
-                precios["te_solo"],
             ]
         })
 
