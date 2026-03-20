@@ -285,17 +285,21 @@ with st.expander("📊 Resumen de ventas"):
                 pd.to_numeric(df_ventas["cantidad_bebidas_solas"], errors="coerce").fillna(0).sum(),
                 pd.to_numeric(df_ventas["cantidad_cafes_solos"], errors="coerce").fillna(0).sum(),
                 pd.to_numeric(df_ventas["cantidad_te_solos"], errors="coerce").fillna(0).sum(),
+            ],
+            "Total vendido": [
+                pd.to_numeric(df_ventas["cantidad_promo_completo_bebida"], errors="coerce").fillna(0).sum() * precios["promocion_completo_bebida"],
+                pd.to_numeric(df_ventas["cantidad_completos_solos"], errors="coerce").fillna(0).sum() * precios["completo_solo"],
+                pd.to_numeric(df_ventas["cantidad_bebidas_solas"], errors="coerce").fillna(0).sum() * precios["bebida_sola"],
+                pd.to_numeric(df_ventas["cantidad_cafes_solos"], errors="coerce").fillna(0).sum() * precios["cafe_solo"],
+                pd.to_numeric(df_ventas["cantidad_te_solos"], errors="coerce").fillna(0).sum() * precios["te_solo"],
             ]
         })
-
-        resumen["Total vendido"] = resumen["Cantidad vendida"] * resumen["Precio unitario"]
 
         total_general = resumen["Total vendido"].sum()
 
         st.dataframe(
             resumen.style.format({
                 "Cantidad vendida": "{:.0f}",
-                "Precio unitario": lambda x: f"${x:,.0f}".replace(",", "."),
                 "Total vendido": lambda x: f"${x:,.0f}".replace(",", ".")
             }),
             use_container_width=True,
