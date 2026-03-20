@@ -220,15 +220,6 @@ with st.form("formulario_venta", clear_on_submit=True):
         + int(cantidad_completos) * precios["completo_solo"]
     )
 
-    st.markdown("""
-    <style>
-    div[data-testid="stFormSubmitButton"] > button {
-        font-weight: bold;
-        font-size: 18px;
-    }
-    </style>
-    """, unsafe_allow_html=True)
-
     guardar = st.form_submit_button("💾 Guardar venta", type="primary")
 
     st.markdown(
