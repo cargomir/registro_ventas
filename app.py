@@ -1,65 +1,18 @@
-from pathlib import Path
 from datetime import datetime
 
 import pandas as pd
 import streamlit as st
-from openpyxl import load_workbook
-import json
 import gspread
-from google.oauth2.service_account import Credentials
 
 # ======================================================
 # CONFIGURACIÓN
 # ======================================================
 st.set_page_config(page_title="Registro de ventas", page_icon="🧾", layout="centered")
 
-SCOPES = [
-    "https://www.googleapis.com/auth/spreadsheets",
-    "https://www.googleapis.com/auth/drive"
-]
-
 SHEET_ID = "11yoIjPuw6v2LxOZ2Hmbg3BxVv-Qzn-jISOxNKTMjO_I"
-NOMBRE_HOJA = "Ventas"
-
-
-@st.cache_data(ttl=300)
-def cargar_datos():
-    creds_dict = json.loads(st.secrets["gcp_service_account"]["json"])
-    creds = Credentials.from_service_account_info(creds_dict, scopes=SCOPES)
-    client = gspread.authorize(creds)
-
-    spreadsheet = client.open_by_key(SHEET_ID)
-
-    ventas = pd.DataFrame(
-        spreadsheet.worksheet("Ventas").get_all_records()
-    )
-
-    precios = pd.DataFrame(
-        spreadsheet.worksheet("Precios").get_all_records()
-    )
-
-    return ventas, precios
-
-
-st.title("Registro de ventas")
-
-try:
-    ventas, precios = cargar_datos()
-
-    st.success("Conexión exitosa con Google Sheets")
-
-    st.subheader("Ventas")
-    st.dataframe(ventas, use_container_width=True)
-
-    st.subheader("Precios")
-    st.dataframe(precios, use_container_width=True)
-
-except Exception as e:
-    st.error("No se pudo cargar la Google Sheet")
-    st.exception(e)
-
 HOJA_VENTAS = "Ventas"
 HOJA_PRECIOS = "Precios"
+
 
 COLUMNAS_VENTAS = [
     "fecha",
@@ -83,22 +36,40 @@ PRODUCTOS_ESPERADOS = [
 
 
 # ======================================================
+# CONEXIÓN GOOGLE SHEETS
+# ======================================================
+@st.cache_resource
+def conectar_gsheet():
+    return gspread.service_account_from_dict(
+        dict(st.secrets["gcp_service_account"])
+    )
+
+
+def abrir_spreadsheet():
+    client = conectar_gsheet()
+    return client.open_by_key(SHEET_ID)
+
+
+# ======================================================
 # FUNCIONES
 # ======================================================
+@st.cache_data(ttl=300)
 def leer_precios():
-    """
-    Lee la hoja Precios del Excel.
-    Debe tener columnas: producto, precio
-    """
     try:
-        df_precios = pd.read_excel(RUTA_ARCHIVO, sheet_name=HOJA_PRECIOS)
+        spreadsheet = abrir_spreadsheet()
+        ws = spreadsheet.worksheet(HOJA_PRECIOS)
 
+        df_precios = pd.DataFrame(ws.get_all_records())
         df_precios.columns = [c.strip().lower() for c in df_precios.columns]
 
         if "producto" not in df_precios.columns or "precio" not in df_precios.columns:
             raise ValueError("La hoja 'Precios' debe contener las columnas 'producto' y 'precio'.")
 
         df_precios["producto"] = df_precios["producto"].astype(str).str.strip().str.lower()
+        df_precios["precio"] = pd.to_numeric(df_precios["precio"], errors="coerce")
+
+        if df_precios["precio"].isna().any():
+            raise ValueError("Hay precios no numéricos o vacíos en la hoja 'Precios'.")
 
         precios = dict(zip(df_precios["producto"], df_precios["precio"]))
 
@@ -118,20 +89,25 @@ def leer_precios():
         raise RuntimeError(f"No fue posible leer la hoja de precios: {e}")
 
 
+@st.cache_data(ttl=60)
 def leer_ventas():
     try:
-        df = pd.read_excel(RUTA_ARCHIVO, sheet_name=HOJA_VENTAS)
+        spreadsheet = abrir_spreadsheet()
+        ws = spreadsheet.worksheet(HOJA_VENTAS)
+
+        df = pd.DataFrame(ws.get_all_records())
+
+        if df.empty:
+            return pd.DataFrame(columns=COLUMNAS_VENTAS)
+
+        df.columns = [c.strip() for c in df.columns]
 
         for col in COLUMNAS_VENTAS:
             if col not in df.columns:
                 df[col] = None
 
         df = df[COLUMNAS_VENTAS]
-
-        # Eliminar filas completamente vacías
         df = df.dropna(how="all")
-
-        # Eliminar filas donde nombre_comprador esté vacío
         df = df[df["nombre_comprador"].notna()]
         df = df[df["nombre_comprador"].astype(str).str.strip() != ""]
 
@@ -175,35 +151,18 @@ def guardar_venta(
         int(total_venta),
     ]
 
-    wb = load_workbook(RUTA_ARCHIVO)
-    ws = wb[HOJA_VENTAS]
+    spreadsheet = abrir_spreadsheet()
+    ws = spreadsheet.worksheet(HOJA_VENTAS)
+    ws.append_row(nueva_fila, value_input_option="USER_ENTERED")
 
-    fila_destino = None
-
-    for fila in range(2, ws.max_row + 2):
-        valores = [ws.cell(row=fila, column=col).value for col in range(1, 10)]
-        if all(v is None or str(v).strip() == "" for v in valores):
-            fila_destino = fila
-            break
-
-    if fila_destino is None:
-        fila_destino = ws.max_row + 1
-
-    for col_idx, valor in enumerate(nueva_fila, start=1):
-        ws.cell(row=fila_destino, column=col_idx, value=valor)
-
-    wb.save(RUTA_ARCHIVO)
-    return fila_destino
+    leer_ventas.clear()
+    return True
 
 
 # ======================================================
 # INTERFAZ
 # ======================================================
 st.title("🧾 Registro de ventas")
-
-if not RUTA_ARCHIVO.exists():
-    st.error(f"No se encontró el archivo Excel en la ruta: {RUTA_ARCHIVO}")
-    st.stop()
 
 try:
     precios = leer_precios()
@@ -223,10 +182,8 @@ with st.form("formulario_venta", clear_on_submit=True):
             value=0,
             step=1
         )
-        
-        
-    with col2:
 
+    with col2:
         cantidad_completos = st.number_input(
             "Cantidad de completos solos",
             min_value=0,
@@ -254,7 +211,6 @@ with st.form("formulario_venta", clear_on_submit=True):
             value=0,
             step=1
         )
-        
 
     total_estimado = (
         int(cantidad_promo) * precios["promocion_completo_bebida"]
@@ -265,8 +221,8 @@ with st.form("formulario_venta", clear_on_submit=True):
     )
 
     st.markdown(
-    f"<h2 style='color:green;'>💰 Total a pagar ({nombre_comprador}): ${total_estimado:,}</h2>".replace(",", "."),
-    unsafe_allow_html=True
+        f"<h2 style='color:green;'>💰 Total a pagar ({nombre_comprador}): ${total_estimado:,}</h2>".replace(",", "."),
+        unsafe_allow_html=True
     )
 
     guardar = st.form_submit_button("Guardar venta")
@@ -286,7 +242,7 @@ with st.form("formulario_venta", clear_on_submit=True):
             st.error("Debes registrar al menos un producto.")
         else:
             try:
-                fila_guardada = guardar_venta(
+                guardar_venta(
                     nombre_comprador=nombre_comprador,
                     cantidad_promo=int(cantidad_promo),
                     cantidad_completos=int(cantidad_completos),
@@ -295,7 +251,7 @@ with st.form("formulario_venta", clear_on_submit=True):
                     cantidad_cafes=int(cantidad_cafes),
                     precios=precios,
                 )
-                st.success(f"Venta guardada correctamente en la fila {fila_guardada}.")
+                st.success("Venta guardada correctamente.")
             except Exception as e:
                 st.error(f"No fue posible guardar la venta: {e}")
 
@@ -307,7 +263,7 @@ df_ventas = leer_ventas()
 if df_ventas.empty:
     st.info("Aún no hay ventas registradas.")
 else:
-    st.dataframe(df_ventas.tail(20), width='stretch', hide_index=True)
+    st.dataframe(df_ventas.tail(20), use_container_width=True, hide_index=True)
 
 with st.expander("💰 Consultar precios vigentes"):
     df_precios_mostrar = pd.DataFrame({
@@ -329,6 +285,6 @@ with st.expander("💰 Consultar precios vigentes"):
 
     st.dataframe(
         df_precios_mostrar,
-        width='stretch',
+        use_container_width=True,
         hide_index=True
     )
