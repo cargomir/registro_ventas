@@ -179,7 +179,7 @@ with st.form("formulario_venta", clear_on_submit=True):
 
     with col1:
         cantidad_promo = st.number_input(
-            "Cantidad promoción completo + bebida",
+            "Cantidad promo completo + bebestible",
             min_value=0,
             value=0,
             step=1
@@ -201,14 +201,14 @@ with st.form("formulario_venta", clear_on_submit=True):
         )
 
         cantidad_cafes = st.number_input(
-            "Cantidad de cafés solos",
+            "Cantidad de café(s) solos",
             min_value=0,
             value=0,
             step=1
         )
 
         cantidad_te = st.number_input(
-            "Cantidad de té solos",
+            "Cantidad de té(s) solos",
             min_value=0,
             value=0,
             step=1
@@ -267,7 +267,19 @@ df_ventas = leer_ventas()
 if df_ventas.empty:
     st.info("Aún no hay ventas registradas.")
 else:
-    st.dataframe(df_ventas.tail(20), use_container_width=True, hide_index=True)
+    df_ventas["datetime_orden"] = pd.to_datetime(
+        df_ventas["fecha"].astype(str) + " " + df_ventas["hora"].astype(str),
+        errors="coerce"
+    )
+
+    df_ventas_mostrar = (
+        df_ventas
+        .sort_values("datetime_orden", ascending=False)
+        .drop(columns=["datetime_orden"])
+        .head(20)
+    )
+
+    st.dataframe(df_ventas_mostrar, use_container_width=True, hide_index=True)
 
 with st.expander("📊 Resumen de ventas"):
     if df_ventas.empty:
