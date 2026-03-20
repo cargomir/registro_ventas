@@ -165,7 +165,7 @@ def guardar_venta(
 # INTERFAZ
 # ======================================================
 st.markdown(
-    "<h1 style='color:#FF5733;'>🧾 Registro de ventas</h1>",
+    "<h1 style='color:#FF1F1F;'>🧾 Registro de ventas</h1>",
     unsafe_allow_html=True
 )
 
@@ -282,7 +282,7 @@ else:
         .head(20)
     )
 
-    st.dataframe(df_ventas_mostrar, use_container_width=True, hide_index=True)
+    st.dataframe(df_ventas_mostrar, width="stretch", hide_index=True)
 
 with st.expander("📊 Resumen de ventas"):
     if df_ventas.empty:
@@ -319,7 +319,7 @@ with st.expander("📊 Resumen de ventas"):
                 "Cantidad vendida": "{:.0f}",
                 "Total vendido": lambda x: f"${x:,.0f}".replace(",", ".")
             }),
-            use_container_width=True,
+            width="stretch",
             hide_index=True
         )
 
@@ -350,6 +350,6 @@ with st.expander("💰 Consultar precios"):
         df_precios_mostrar.style.format({
             "Precio": lambda x: f"${x:,.0f}".replace(",", ".")
         }),
-        use_container_width=True,
+        width="stretch",
         hide_index=True
     )
