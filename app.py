@@ -220,12 +220,14 @@ with st.form("formulario_venta", clear_on_submit=True):
         + int(cantidad_completos) * precios["completo_solo"]
     )
 
+    guardar = st.form_submit_button("Guardar venta")
+    
     st.markdown(
         f"<h2 style='color:green;'>💰 Total a pagar ({nombre_comprador}): ${total_estimado:,}</h2>".replace(",", "."),
         unsafe_allow_html=True
     )
 
-    guardar = st.form_submit_button("Guardar venta")
+
 
     if guardar:
         total_items = (
