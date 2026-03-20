@@ -267,6 +267,53 @@ if df_ventas.empty:
 else:
     st.dataframe(df_ventas.tail(20), use_container_width=True, hide_index=True)
 
+with st.expander("📊 Resumen de ventas"):
+    if df_ventas.empty:
+        st.info("Aún no hay ventas registradas.")
+    else:
+        resumen = pd.DataFrame({
+            "Producto": [
+                "Promoción completo + bebida",
+                "Completo solo",
+                "Bebida sola",
+                "Café solo",
+                "Té solo"
+            ],
+            "Cantidad vendida": [
+                pd.to_numeric(df_ventas["cantidad_promo_completo_bebida"], errors="coerce").fillna(0).sum(),
+                pd.to_numeric(df_ventas["cantidad_completos_solos"], errors="coerce").fillna(0).sum(),
+                pd.to_numeric(df_ventas["cantidad_bebidas_solas"], errors="coerce").fillna(0).sum(),
+                pd.to_numeric(df_ventas["cantidad_cafes_solos"], errors="coerce").fillna(0).sum(),
+                pd.to_numeric(df_ventas["cantidad_te_solos"], errors="coerce").fillna(0).sum(),
+            ],
+            "Precio unitario": [
+                precios["promocion_completo_bebida"],
+                precios["completo_solo"],
+                precios["bebida_sola"],
+                precios["cafe_solo"],
+                precios["te_solo"],
+            ]
+        })
+
+        resumen["Total vendido"] = resumen["Cantidad vendida"] * resumen["Precio unitario"]
+
+        total_general = resumen["Total vendido"].sum()
+
+        st.dataframe(
+            resumen.style.format({
+                "Cantidad vendida": "{:.0f}",
+                "Precio unitario": lambda x: f"${x:,.0f}".replace(",", "."),
+                "Total vendido": lambda x: f"${x:,.0f}".replace(",", ".")
+            }),
+            use_container_width=True,
+            hide_index=True
+        )
+
+        st.metric(
+            "💰 Total general de ventas",
+            f"${total_general:,.0f}".replace(",", ".")
+        )
+
 with st.expander("💰 Consultar precios vigentes"):
     df_precios_mostrar = pd.DataFrame({
         "Producto": [
