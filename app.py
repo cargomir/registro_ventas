@@ -170,7 +170,7 @@ st.markdown(
 )
 
 st.markdown(
-    "<h3 style='color:#555555; margin-top:-10px;'>Control diario de ventas del curso</h3>",
+    "<h3 style='color:#555555; margin-top:-10px;'>Colegio Gabriela Mistral</h3>",
     unsafe_allow_html=True
 )
 
