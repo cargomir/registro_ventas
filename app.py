@@ -164,15 +164,17 @@ def guardar_venta(
 # ======================================================
 # INTERFAZ
 # ======================================================
-st.markdown(
-    "<h1 style='color:#FF1F1F;'>🧾 Registro de ventas 8° A</h1>",
-    unsafe_allow_html=True
-)
+st.markdown("""
+<div style='display:grid; grid-template-columns:auto 1fr; align-items:center; column-gap:10px;'>
 
-st.markdown(
-    "<h3 style='color:#555555; margin-top:-20px; margin-left:50px;'>Colegio Gabriela Mistral</h3>",
-    unsafe_allow_html=True
-)
+    <div style='font-size:40px;'>🧾</div>
+    <h1 style='color:#FF1F1F; margin:0;'>Registro de ventas 8° A</h1>
+
+    <div></div>
+    <h3 style='color:#555555; margin:0;'>Colegio Gabriela Mistral</h3>
+
+</div>
+""", unsafe_allow_html=True)
 
 try:
     precios = leer_precios()
