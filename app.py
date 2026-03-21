@@ -165,7 +165,7 @@ def guardar_venta(
 # INTERFAZ
 # ======================================================
 st.markdown(
-    "<h1 style='color:#FF1F1F;'>🧾 Registro de ventas completada 8° A</h1>",
+    "<h1 style='color:#FF1F1F;'>🧾 Registro de ventas 8° A</h1>",
     unsafe_allow_html=True
 )
 
