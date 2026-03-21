@@ -9,7 +9,7 @@ from zoneinfo import ZoneInfo
 # ======================================================
 # CONFIGURACIÓN
 # ======================================================
-st.set_page_config(page_title="Registro de ventas", page_icon="🧾", layout="centered")
+st.set_page_config(page_title="Registro de ventas", page_icon="🌭", layout="centered")
 
 SHEET_ID = "11yoIjPuw6v2LxOZ2Hmbg3BxVv-Qzn-jISOxNKTMjO_I"
 HOJA_VENTAS = "Ventas"
@@ -165,7 +165,7 @@ def guardar_venta(
 # INTERFAZ
 # ======================================================
 st.markdown(
-    "<h1 style='color:#FF1F1F;'>🧾 Registro de ventas</h1>",
+    "<h1 style='color:#FF1F1F;'>🧾 Registro de ventas completada 8° A</h1>",
     unsafe_allow_html=True
 )
 
