@@ -291,6 +291,20 @@ else:
         .head(20)
     )
 
+    # Renombrar columnas
+    df_ventas_mostrar = df_ventas_mostrar.rename(columns={
+        "fecha": "Fecha",
+        "hora": "Hora",
+        "nombre_comprador": "Comprador",
+        "cantidad_promo_completo_bebida": "Promo completo + bebida",
+        "cantidad_completos_solos": "Completos (solos)",
+        "cantidad_bebidas_solas": "Bebidas (solas)",
+        "cantidad_cafes_solos": "Cafés (solos)",
+        "cantidad_te_solos": "Tés (solos)",
+        "total_venta": "Total ($)",
+        "observaciones": "Observaciones"
+    })
+
     st.dataframe(df_ventas_mostrar, width="stretch", hide_index=True)
 
 with st.expander("📊 Resumen de ventas"):
