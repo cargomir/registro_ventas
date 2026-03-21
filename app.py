@@ -228,7 +228,7 @@ with st.form("formulario_venta", clear_on_submit=True):
     guardar = st.form_submit_button("💾 Guardar venta", type="primary")
 
     st.markdown(
-        f"<h2 style='color:#2F5FBF;'>💰 Total a pagar ({nombre_comprador}): ${total_estimado:,}</h2>".replace(",", "."),
+        f"<h2 style='color:#2F5FBF;'>🌭 Total a pagar ({nombre_comprador}): ${total_estimado:,} 🌭</h2>".replace(",", "."),
         unsafe_allow_html=True
     )
 
@@ -328,7 +328,7 @@ with st.expander("📊 Resumen de ventas"):
             f"${total_general:,.0f}".replace(",", ".")
         )
 
-with st.expander("💰 Consultar precios"):
+with st.expander("💵 Consultar precios"):
     df_precios_mostrar = pd.DataFrame({
         "Producto": [
             "Promoción completo + bebida",
