@@ -1,5 +1,3 @@
-from datetime import datetime
-
 import pandas as pd
 import streamlit as st
 import gspread
@@ -26,6 +24,7 @@ COLUMNAS_VENTAS = [
     "cantidad_cafes_solos",
     "cantidad_te_solos",
     "total_venta",
+    "observaciones",
 ]
 
 PRODUCTOS_ESPERADOS = [
@@ -128,6 +127,7 @@ def guardar_venta(
     cantidad_cafes,
     cantidad_completos,
     precios,
+    observaciones,
 ):
     ahora = datetime.now(ZoneInfo("America/Santiago"))
     fecha = ahora.strftime("%Y-%m-%d")
@@ -151,6 +151,7 @@ def guardar_venta(
         int(cantidad_cafes),
         int(cantidad_te),
         int(total_venta),
+        observaciones.strip() if observaciones else ""
     ]
 
     spreadsheet = abrir_spreadsheet()
@@ -221,6 +222,7 @@ with st.form("formulario_venta", clear_on_submit=True):
             value=0,
             step=1
         )
+    observaciones = st.text_area("📝 Observaciones del pedido (opcional)", placeholder="Ej: Un completo sin mayo, café sin azúcar...")
 
     total_estimado = (
         int(cantidad_promo) * precios["promocion_completo_bebida"]
@@ -236,8 +238,6 @@ with st.form("formulario_venta", clear_on_submit=True):
         f"<h2 style='color:#2F5FBF;'>🌭 Total a pagar ({nombre_comprador}): ${total_estimado:,}</h2>".replace(",", "."),
         unsafe_allow_html=True
     )
-
-
 
     if guardar:
         total_items = (
@@ -262,6 +262,7 @@ with st.form("formulario_venta", clear_on_submit=True):
                     cantidad_te=int(cantidad_te),
                     cantidad_cafes=int(cantidad_cafes),
                     precios=precios,
+                    observaciones=observaciones,
                 )
                 st.success("Venta guardada correctamente.")
             except Exception as e:
