@@ -170,7 +170,7 @@ st.markdown(
 )
 
 st.markdown(
-    "<h3 style='color:#555555; margin-top:-20px;'>&nbsp;&nbsp;&nbsp;Colegio Gabriela Mistral</h3>",
+    "<h3 style='color:#555555; margin-top:-20px;'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Colegio Gabriela Mistral</h3>",
     unsafe_allow_html=True
 )
 
@@ -269,7 +269,10 @@ with st.form("formulario_venta", clear_on_submit=True):
 
 st.divider()
 
-st.subheader("Últimas ventas registradas")
+st.markdown(
+    "<h2 style='color:#FF1F1F;'>Últimas ventas registradas</h2>",
+    unsafe_allow_html=True
+)
 df_ventas = leer_ventas()
 
 if df_ventas.empty:
