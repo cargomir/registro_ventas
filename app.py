@@ -169,6 +169,11 @@ st.markdown(
     unsafe_allow_html=True
 )
 
+st.markdown(
+    "<h3 style='color:#555555; margin-top:-10px;'>Control diario de ventas del curso</h3>",
+    unsafe_allow_html=True
+)
+
 try:
     precios = leer_precios()
 except Exception as e:
