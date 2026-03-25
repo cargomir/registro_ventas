@@ -278,8 +278,11 @@ with st.form("formulario_venta", clear_on_submit=False):
 
     guardar = st.form_submit_button("💾 Guardar venta", type="primary")
 
+    nombre_mostrar = nombre_comprador if nombre_comprador else st.session_state.get("ultimo_nombre", "")
+    total_mostrar = total_estimado if nombre_comprador else st.session_state.get("ultimo_total", 0)
+
     st.markdown(
-        f"<h2 style='color:#2F5FBF;'>🌭 Total a pagar ({nombre_comprador}): ${total_estimado:,}</h2>".replace(",", "."),
+        f"<h2 style='color:#2F5FBF;'>🌭 Total a pagar ({nombre_mostrar}): ${total_mostrar:,}</h2>".replace(",", "."),
         unsafe_allow_html=True
     )
 
@@ -312,6 +315,9 @@ with st.form("formulario_venta", clear_on_submit=False):
                     #observaciones=observaciones,
                 )
                 st.success("Venta guardada correctamente.")
+
+                st.session_state.ultimo_nombre = nombre_comprador
+                st.session_state.ultimo_total = total_estimado
 
                 st.session_state.limpiar_formulario = True
                 st.rerun()
