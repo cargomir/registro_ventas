@@ -368,7 +368,7 @@ with st.expander("📊 Resumen de ventas"):
             hide_index=True
         )
 
-        col1, col2 = st.columns(2)
+        col1, col2, col3 = st.columns(3)
 
         col1.metric(
             "💵 Total efectivo",
@@ -380,7 +380,7 @@ with st.expander("📊 Resumen de ventas"):
             f"${total_transferencia:,.0f}".replace(",", ".")
         )
 
-        st.metric(
+        col3.metric(
             "💰 Total general de ventas",
             f"${total_general:,.0f}".replace(",", ".")
         )
