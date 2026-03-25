@@ -228,9 +228,8 @@ with st.form("formulario_venta", clear_on_submit=True):
     
     # observaciones = st.text_area("📝 Observaciones del pedido (opcional)", placeholder="Ej: Un completo sin mayo, café sin azúcar...")
     
-    st.markdown("**Forma de pago**")
     forma_pago = st.radio(
-        "",
+        "FORMA DE PAGO",
         options=["Efectivo", "Transferencia"],
         horizontal=True
     )
@@ -348,6 +347,16 @@ with st.expander("📊 Resumen de ventas"):
             ]
         })
 
+        # Totales por forma de pago
+        total_efectivo = df_ventas.loc[
+            df_ventas["forma_pago"] == "Efectivo", "total_venta"
+        ].sum()
+
+        total_transferencia = df_ventas.loc[
+            df_ventas["forma_pago"] == "Transferencia", "total_venta"
+        ].sum()
+
+        # Total general
         total_general = resumen["Total vendido"].sum()
 
         st.dataframe(
@@ -357,6 +366,18 @@ with st.expander("📊 Resumen de ventas"):
             }),
             width="stretch",
             hide_index=True
+        )
+
+        col1, col2 = st.columns(2)
+
+        col1.metric(
+            "💵 Total efectivo",
+            f"${total_efectivo:,.0f}".replace(",", ".")
+        )
+
+        col2.metric(
+            "🏦 Total transferencias",
+            f"${total_transferencia:,.0f}".replace(",", ".")
         )
 
         st.metric(
