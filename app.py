@@ -228,10 +228,9 @@ with st.form("formulario_venta", clear_on_submit=True):
     
     # observaciones = st.text_area("📝 Observaciones del pedido (opcional)", placeholder="Ej: Un completo sin mayo, café sin azúcar...")
     
-    forma_pago = st.radio(
-        "FORMA DE PAGO",
-        options=["Efectivo", "Transferencia"],
-        horizontal=True
+    forma_pago = st.selectbox(
+    "FORMA DE PAGO",
+    options=["", "Efectivo", "Transferencia"]
     )
 
     total_estimado = (
@@ -262,6 +261,8 @@ with st.form("formulario_venta", clear_on_submit=True):
             st.error("Debes ingresar el nombre del comprador.")
         elif total_items == 0:
             st.error("Debes registrar al menos un producto.")
+        elif forma_pago == "Seleccione una opción":
+            st.error("Debes seleccionar una forma de pago.")
         else:
             try:
                 guardar_venta(
