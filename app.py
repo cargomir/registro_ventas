@@ -24,6 +24,7 @@ COLUMNAS_VENTAS = [
     "cantidad_cafes_solos",
     "cantidad_te_solos",
     "total_venta",
+    "forma_pago",
     #"observaciones",
 ]
 
@@ -127,6 +128,7 @@ def guardar_venta(
     cantidad_cafes,
     cantidad_completos,
     precios,
+    forma_pago,
     #observaciones,
 ):
     ahora = datetime.now(ZoneInfo("America/Santiago"))
@@ -151,6 +153,7 @@ def guardar_venta(
         int(cantidad_cafes),
         int(cantidad_te),
         int(total_venta),
+        forma_pago,
         #observaciones.strip() if observaciones else ""
     ]
 
@@ -222,7 +225,14 @@ with st.form("formulario_venta", clear_on_submit=True):
             value=0,
             step=1
         )
+    
     # observaciones = st.text_area("📝 Observaciones del pedido (opcional)", placeholder="Ej: Un completo sin mayo, café sin azúcar...")
+    
+    forma_pago = st.radio(
+        "Forma de pago",
+        options=["Transferencia", "Efectivo"],
+        horizontal=True
+    )
 
     total_estimado = (
         int(cantidad_promo) * precios["promocion_completo_bebida"]
@@ -262,6 +272,7 @@ with st.form("formulario_venta", clear_on_submit=True):
                     cantidad_te=int(cantidad_te),
                     cantidad_cafes=int(cantidad_cafes),
                     precios=precios,
+                    forma_pago=forma_pago,
                     #observaciones=observaciones,
                 )
                 st.success("Venta guardada correctamente.")
@@ -302,6 +313,7 @@ else:
         "cantidad_cafes_solos": "Cafés (solos)",
         "cantidad_te_solos": "Tés (solos)",
         "total_venta": "Total ($)",
+        "forma_pago": "Forma de pago",
         #"observaciones": "Observaciones"
     })
 
