@@ -385,7 +385,7 @@ with st.expander("📊 Resumen de ventas"):
             f"${total_general:,.0f}".replace(",", ".")
         )
 
-with st.expander("💵 Consultar precios"):
+with st.expander("💲Consultar precios"):
     df_precios_mostrar = pd.DataFrame({
         "Producto": [
             "Promoción completo + bebida",
