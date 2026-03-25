@@ -230,7 +230,7 @@ with st.form("formulario_venta", clear_on_submit=True):
     
     forma_pago = st.selectbox(
     "FORMA DE PAGO",
-    options=["", "Efectivo", "Transferencia"]
+    options=["Seleccione una opción", "Efectivo", "Transferencia"]
     )
 
     total_estimado = (
