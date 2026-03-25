@@ -228,8 +228,9 @@ with st.form("formulario_venta", clear_on_submit=True):
     
     # observaciones = st.text_area("📝 Observaciones del pedido (opcional)", placeholder="Ej: Un completo sin mayo, café sin azúcar...")
     
+    st.markdown("**Forma de pago**")
     forma_pago = st.radio(
-        "Forma de pago",
+        "",
         options=["Efectivo", "Transferencia"],
         horizontal=True
     )
