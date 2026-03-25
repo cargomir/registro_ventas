@@ -205,6 +205,19 @@ if "cantidad_te" not in st.session_state:
 if "forma_pago" not in st.session_state:
     st.session_state.forma_pago = "Seleccione una opción"
 
+if "limpiar_formulario" not in st.session_state:
+    st.session_state.limpiar_formulario = False
+
+if st.session_state.limpiar_formulario:
+    st.session_state.nombre_comprador = ""
+    st.session_state.cantidad_promo = 0
+    st.session_state.cantidad_completos = 0
+    st.session_state.cantidad_bebidas = 0
+    st.session_state.cantidad_cafes = 0
+    st.session_state.cantidad_te = 0
+    st.session_state.forma_pago = "Seleccione una opción"
+    st.session_state.limpiar_formulario = False
+
 with st.form("formulario_venta", clear_on_submit=False):
     nombre_comprador = st.text_input("NOMBRE COMPRADOR", key="nombre_comprador")
 
@@ -300,16 +313,9 @@ with st.form("formulario_venta", clear_on_submit=False):
                 )
                 st.success("Venta guardada correctamente.")
 
-                st.session_state.nombre_comprador = ""                
-                st.session_state.cantidad_promo = 0
-                st.session_state.cantidad_completos = 0
-                st.session_state.cantidad_bebidas = 0
-                st.session_state.cantidad_cafes = 0
-                st.session_state.cantidad_te = 0
-                st.session_state.forma_pago = "Seleccione una opción"
-
+                st.session_state.limpiar_formulario = True
                 st.rerun()
-                
+
             except Exception as e:
                 st.error(f"No fue posible guardar la venta: {e}")
 
