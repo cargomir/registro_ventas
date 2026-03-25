@@ -222,7 +222,7 @@ with st.form("formulario_venta", clear_on_submit=True):
             value=0,
             step=1
         )
-    observaciones = st.text_area("📝 Observaciones del pedido (opcional)", placeholder="Ej: Un completo sin mayo, café sin azúcar...")
+    # observaciones = st.text_area("📝 Observaciones del pedido (opcional)", placeholder="Ej: Un completo sin mayo, café sin azúcar...")
 
     total_estimado = (
         int(cantidad_promo) * precios["promocion_completo_bebida"]
@@ -262,7 +262,7 @@ with st.form("formulario_venta", clear_on_submit=True):
                     cantidad_te=int(cantidad_te),
                     cantidad_cafes=int(cantidad_cafes),
                     precios=precios,
-                    observaciones=observaciones,
+                    #observaciones=observaciones,
                 )
                 st.success("Venta guardada correctamente.")
             except Exception as e:
