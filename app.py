@@ -184,8 +184,29 @@ except Exception as e:
     st.error(str(e))
     st.stop()
 
-with st.form("formulario_venta", clear_on_submit=True):
-    nombre_comprador = st.text_input("NOMBRE COMPRADOR")
+if "nombre_comprador" not in st.session_state:
+    st.session_state.nombre_comprador = ""
+
+if "cantidad_promo" not in st.session_state:
+    st.session_state.cantidad_promo = 0
+
+if "cantidad_completos" not in st.session_state:
+    st.session_state.cantidad_completos = 0
+
+if "cantidad_bebidas" not in st.session_state:
+    st.session_state.cantidad_bebidas = 0
+
+if "cantidad_cafes" not in st.session_state:
+    st.session_state.cantidad_cafes = 0
+
+if "cantidad_te" not in st.session_state:
+    st.session_state.cantidad_te = 0
+
+if "forma_pago" not in st.session_state:
+    st.session_state.forma_pago = "Seleccione una opción"
+
+with st.form("formulario_venta", clear_on_submit=False):
+    nombre_comprador = st.text_input("NOMBRE COMPRADOR", key="nombre_comprador")
 
     col1, col2 = st.columns(2)
 
@@ -194,7 +215,8 @@ with st.form("formulario_venta", clear_on_submit=True):
             "Cantidad promo completo + bebestible",
             min_value=0,
             value=0,
-            step=1
+            step=1,
+            key="cantidad_promo"
         )
 
     with col2:
@@ -202,35 +224,40 @@ with st.form("formulario_venta", clear_on_submit=True):
             "Cantidad de completos solos",
             min_value=0,
             value=0,
-            step=1
+            step=1,
+            key="cantidad_completos"
         )
 
         cantidad_bebidas = st.number_input(
             "Cantidad de bebidas solas",
             min_value=0,
             value=0,
-            step=1
+            step=1,
+            key="cantidad_bebidas"
         )
 
         cantidad_cafes = st.number_input(
             "Cantidad de café(s) solos",
             min_value=0,
             value=0,
-            step=1
+            step=1,
+            key="cantidad_cafes"
         )
 
         cantidad_te = st.number_input(
             "Cantidad de té(s) solos",
             min_value=0,
             value=0,
-            step=1
+            step=1,
+            key="cantidad_te"
         )
     
     # observaciones = st.text_area("📝 Observaciones del pedido (opcional)", placeholder="Ej: Un completo sin mayo, café sin azúcar...")
     
     forma_pago = st.selectbox(
     "FORMA DE PAGO",
-    options=["Seleccione una opción", "Efectivo", "Transferencia"]
+    options=["Seleccione una opción", "Efectivo", "Transferencia"],
+    key="forma_pago"
     )
 
     total_estimado = (
@@ -277,6 +304,16 @@ with st.form("formulario_venta", clear_on_submit=True):
                     #observaciones=observaciones,
                 )
                 st.success("Venta guardada correctamente.")
+
+                st.session_state.nombre_comprador = ""                
+                st.session_state.cantidad_promo = 0
+                st.session_state.cantidad_completos = 0
+                st.session_state.cantidad_bebidas = 0
+                st.session_state.cantidad_cafes = 0
+                st.session_state.cantidad_te = 0
+                st.session_state.forma_pago = "Seleccione una opción"
+
+                st.rerun()
             except Exception as e:
                 st.error(f"No fue posible guardar la venta: {e}")
 
