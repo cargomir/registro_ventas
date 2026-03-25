@@ -127,7 +127,7 @@ def guardar_venta(
     cantidad_cafes,
     cantidad_completos,
     precios,
-    observaciones,
+    #observaciones,
 ):
     ahora = datetime.now(ZoneInfo("America/Santiago"))
     fecha = ahora.strftime("%Y-%m-%d")
@@ -151,7 +151,7 @@ def guardar_venta(
         int(cantidad_cafes),
         int(cantidad_te),
         int(total_venta),
-        observaciones.strip() if observaciones else ""
+        #observaciones.strip() if observaciones else ""
     ]
 
     spreadsheet = abrir_spreadsheet()
@@ -302,7 +302,7 @@ else:
         "cantidad_cafes_solos": "Cafés (solos)",
         "cantidad_te_solos": "Tés (solos)",
         "total_venta": "Total ($)",
-        "observaciones": "Observaciones"
+        #"observaciones": "Observaciones"
     })
 
     st.dataframe(df_ventas_mostrar, width="stretch", hide_index=True)
