@@ -24,7 +24,7 @@ COLUMNAS_VENTAS = [
     "cantidad_cafes_solos",
     "cantidad_te_solos",
     "total_venta",
-    "observaciones",
+    #"observaciones",
 ]
 
 PRODUCTOS_ESPERADOS = [
