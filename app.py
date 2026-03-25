@@ -230,7 +230,7 @@ with st.form("formulario_venta", clear_on_submit=True):
     
     forma_pago = st.radio(
         "Forma de pago",
-        options=["Transferencia", "Efectivo"],
+        options=["Efectivo", "Transferencia"],
         horizontal=True
     )
 
