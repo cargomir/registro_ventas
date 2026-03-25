@@ -214,7 +214,6 @@ with st.form("formulario_venta", clear_on_submit=False):
         cantidad_promo = st.number_input(
             "Cantidad promo completo + bebestible",
             min_value=0,
-            value=0,
             step=1,
             key="cantidad_promo"
         )
@@ -223,7 +222,6 @@ with st.form("formulario_venta", clear_on_submit=False):
         cantidad_completos = st.number_input(
             "Cantidad de completos solos",
             min_value=0,
-            value=0,
             step=1,
             key="cantidad_completos"
         )
@@ -231,7 +229,6 @@ with st.form("formulario_venta", clear_on_submit=False):
         cantidad_bebidas = st.number_input(
             "Cantidad de bebidas solas",
             min_value=0,
-            value=0,
             step=1,
             key="cantidad_bebidas"
         )
@@ -239,7 +236,6 @@ with st.form("formulario_venta", clear_on_submit=False):
         cantidad_cafes = st.number_input(
             "Cantidad de café(s) solos",
             min_value=0,
-            value=0,
             step=1,
             key="cantidad_cafes"
         )
@@ -247,7 +243,6 @@ with st.form("formulario_venta", clear_on_submit=False):
         cantidad_te = st.number_input(
             "Cantidad de té(s) solos",
             min_value=0,
-            value=0,
             step=1,
             key="cantidad_te"
         )
@@ -255,9 +250,9 @@ with st.form("formulario_venta", clear_on_submit=False):
     # observaciones = st.text_area("📝 Observaciones del pedido (opcional)", placeholder="Ej: Un completo sin mayo, café sin azúcar...")
     
     forma_pago = st.selectbox(
-    "FORMA DE PAGO",
-    options=["Seleccione una opción", "Efectivo", "Transferencia"],
-    key="forma_pago"
+        "FORMA DE PAGO",
+        options=["Seleccione una opción", "Efectivo", "Transferencia"],
+        key="forma_pago"
     )
 
     total_estimado = (
@@ -314,6 +309,7 @@ with st.form("formulario_venta", clear_on_submit=False):
                 st.session_state.forma_pago = "Seleccione una opción"
 
                 st.rerun()
+                
             except Exception as e:
                 st.error(f"No fue posible guardar la venta: {e}")
 
