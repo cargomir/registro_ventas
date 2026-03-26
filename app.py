@@ -12,19 +12,41 @@ st.set_page_config(page_title="Registro de ventas 8°A", page_icon="🌭", layou
 # ======================================================
 # ACCESO CON CONTRASEÑA
 # ======================================================
+def mostrar_header():
+    st.markdown(
+        "<h1 style='color:#FF1F1F;'>🧾 Registro de ventas 8° A</h1>",
+        unsafe_allow_html=True
+    )
+
+    st.markdown(
+        "<h3 style='color:#555555; margin-top:-20px;'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Colegio Gabriela Mistral</h3>",
+        unsafe_allow_html=True
+    )
+ 
 def check_password():
     if "authenticated" not in st.session_state:
         st.session_state.authenticated = False
 
+    if "vendedor_actual" not in st.session_state:
+        st.session_state.vendedor_actual = ""
+
     if st.session_state.authenticated:
         return True
 
-    st.markdown("<h2 style='color:#FF1F1F;'>🔒 Acceso restringido</h2>", unsafe_allow_html=True)
+    st.markdown(
+        "<h3 style='color:#2F5FBF;'>🔒 Ingreso a la aplicación</h3>",
+        unsafe_allow_html=True
+    )
+
+    vendedor = st.text_input("Nombre del vendedor o vendedora")
     password = st.text_input("Ingresa la contraseña", type="password")
 
-    if st.button("Ingresar"):
-        if password == st.secrets["APP_PASSWORD"]:
+    if st.button("Ingresar", type="primary"):
+        if not vendedor.strip():
+            st.error("Debes ingresar el nombre del vendedor o vendedora.")
+        elif password == st.secrets["APP_PASSWORD"]:
             st.session_state.authenticated = True
+            st.session_state.vendedor_actual = vendedor.strip()
             st.rerun()
         else:
             st.error("Contraseña incorrecta.")
@@ -32,8 +54,21 @@ def check_password():
     return False
 
 
+mostrar_header()
+
 if not check_password():
     st.stop()
+
+col1, col2 = st.columns([4, 1])
+
+with col1:
+    st.caption(f"Vendedor/a activo/a: {st.session_state.vendedor_actual}")
+
+with col2:
+    if st.button("Cerrar sesión"):
+        st.session_state.authenticated = False
+        st.session_state.vendedor_actual = ""
+        st.rerun()
 
 SHEET_ID = "11yoIjPuw6v2LxOZ2Hmbg3BxVv-Qzn-jISOxNKTMjO_I"
 HOJA_VENTAS = "Ventas"
@@ -42,6 +77,7 @@ HOJA_PRECIOS = "Precios"
 COLUMNAS_VENTAS = [
     "fecha",
     "hora",
+    "vendedor",
     "nombre_comprador",
     "cantidad_promo_completo_bebida",
     "cantidad_completos_solos",
@@ -71,11 +107,9 @@ def conectar_gsheet():
         dict(st.secrets["gcp_service_account"])
     )
 
-
 def abrir_spreadsheet():
     client = conectar_gsheet()
     return client.open_by_key(SHEET_ID)
-
 
 # ======================================================
 # FUNCIONES
@@ -146,6 +180,7 @@ def leer_ventas():
 
 
 def guardar_venta(
+    vendedor,
     nombre_comprador,
     cantidad_promo,
     cantidad_bebidas,
@@ -171,6 +206,7 @@ def guardar_venta(
     nueva_fila = [
         fecha,
         hora,
+        vendedor.strip(),
         nombre_comprador.strip(),
         int(cantidad_promo),
         int(cantidad_completos),
@@ -329,6 +365,7 @@ with st.form("formulario_venta", clear_on_submit=False):
         else:
             try:
                 guardar_venta(
+                    vendedor=st.session_state.vendedor_actual,
                     nombre_comprador=nombre_comprador,
                     cantidad_promo=int(cantidad_promo),
                     cantidad_completos=int(cantidad_completos),
@@ -377,6 +414,7 @@ else:
     df_ventas_mostrar = df_ventas_mostrar.rename(columns={
         "fecha": "Fecha",
         "hora": "Hora",
+        "vendedor": "Vendedor/a",
         "nombre_comprador": "Comprador",
         "cantidad_promo_completo_bebida": "Promo completo + bebida",
         "cantidad_completos_solos": "Completos (solos)",
