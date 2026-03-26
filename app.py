@@ -414,7 +414,7 @@ else:
         "hora": "Hora",
         "vendedor": "Vendedor/a",
         "nombre_comprador": "Comprador/a",
-        "cantidad_promo_completo_bebida": "Promo completo + bebida",
+        "cantidad_promo_completo_bebida": "Promos",
         "cantidad_completos_solos": "Completos (solos)",
         "cantidad_bebidas_solas": "Bebidas (solas)",
         "cantidad_cafes_solos": "Cafés (solos)",
@@ -424,7 +424,16 @@ else:
         #"observaciones": "Observaciones"
     })
 
-    st.dataframe(df_ventas_mostrar, width="stretch", hide_index=True)
+    st.dataframe(
+    df_ventas_mostrar,
+    width="stretch",
+    hide_index=True,
+    column_config={
+        "Fecha": None,
+        "Hora": None,
+        "Vendedor/a": None,
+    }
+    )
 
 with st.expander("📊 Resumen de ventas"):
     if df_ventas.empty:
