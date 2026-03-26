@@ -32,7 +32,7 @@ def check_password():
 
     # 🔒 Título login
     st.markdown(
-        "<h3 style='color:#FF1F1F;'>🔒 Ingreso a registro de ventasA</h3>",
+        "<h3 style='color:#FF1F1F;'>🔒 Ingreso a registro de ventas</h3>",
         unsafe_allow_html=True
     )
 
