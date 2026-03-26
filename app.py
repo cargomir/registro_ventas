@@ -64,7 +64,7 @@ st.markdown("""
 <style>
 div[data-testid="column"] div.stButton > button {
     padding: 0.25rem 0.6rem;
-    font-size: 12px;
+    font-size: 8px;
 }
 </style>
 """, unsafe_allow_html=True)
