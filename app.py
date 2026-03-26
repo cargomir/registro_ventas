@@ -13,7 +13,7 @@ st.set_page_config(page_title="Registro de ventas 8°A", page_icon="🌭", layou
 # ACCESO CON CONTRASEÑA
 # ======================================================
 def mostrar_header():
-    st.image("imagenes/Head.png", use_container_width=True)
+    st.image("imagenes/Head.png", width="stretch")
  
 def check_password():
     if "authenticated" not in st.session_state:
@@ -333,7 +333,7 @@ with st.form("formulario_venta", clear_on_submit=False):
     total_mostrar = total_estimado if nombre_comprador else st.session_state.get("ultimo_total", 0)
 
     st.markdown(
-        f"<h2 style='color:#2F5FBF;'>🌭 Total a pagar ({nombre_mostrar}): ${total_mostrar:,}</h2>".replace(",", "."),
+        f"<h2 style='color:#2F5FBF;'>Total a pagar ({nombre_mostrar}): ${total_mostrar:,}</h2>".replace(",", "."),
         unsafe_allow_html=True
     )
 
@@ -380,7 +380,7 @@ with st.form("formulario_venta", clear_on_submit=False):
 st.divider()
 
 st.markdown(
-    "<h2 style='color:#FF1F1F;'>Últimas ventas registradas</h2>",
+    "<h2 style='color:#FF1F1F;'>🌭 Últimas ventas registradas</h2>",
     unsafe_allow_html=True
 )
 df_ventas = leer_ventas()
