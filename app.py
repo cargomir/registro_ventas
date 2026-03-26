@@ -9,10 +9,35 @@ from zoneinfo import ZoneInfo
 # ======================================================
 st.set_page_config(page_title="Registro de ventas 8°A", page_icon="🌭", layout="centered")
 
+# ======================================================
+# ACCESO CON CONTRASEÑA
+# ======================================================
+def check_password():
+    if "authenticated" not in st.session_state:
+        st.session_state.authenticated = False
+
+    if st.session_state.authenticated:
+        return True
+
+    st.markdown("<h2 style='color:#FF1F1F;'>🔒 Acceso restringido</h2>", unsafe_allow_html=True)
+    password = st.text_input("Ingresa la contraseña", type="password")
+
+    if st.button("Ingresar"):
+        if password == st.secrets["APP_PASSWORD"]:
+            st.session_state.authenticated = True
+            st.rerun()
+        else:
+            st.error("Contraseña incorrecta.")
+
+    return False
+
+
+if not check_password():
+    st.stop()
+
 SHEET_ID = "11yoIjPuw6v2LxOZ2Hmbg3BxVv-Qzn-jISOxNKTMjO_I"
 HOJA_VENTAS = "Ventas"
 HOJA_PRECIOS = "Precios"
-
 
 COLUMNAS_VENTAS = [
     "fecha",
