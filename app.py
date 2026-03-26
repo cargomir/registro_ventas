@@ -36,11 +36,11 @@ def check_password():
     # 🌭 Imagen 
     col1, col2, col3 = st.columns([1,2,1])
     with col2:
-        st.image("imagenes/completo.png", use_container_width=True)
+        st.image("imagenes/completo.png", width="stretch")
 
     # 🔒 Título login
     st.markdown(
-        "<h3 style='color:#2F5FBF;'>🔒 Ingreso a registro de ventas completada 8° A</h3>",
+        "<h3 style='color:#FF1F1F;'>🔒 Ingreso a registro de ventas completada 8° A</h3>",
         unsafe_allow_html=True
     )
 
