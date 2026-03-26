@@ -62,7 +62,7 @@ if not check_password():
 col1, col2 = st.columns([4, 1])
 
 with col1:
-    st.caption(f"Vendedor/a activo/a: {st.session_state.vendedor_actual}")
+    st.caption(f"Vendedor/a en turno: {st.session_state.vendedor_actual}")
 
 with col2:
     if st.button("Cerrar sesión"):
@@ -229,16 +229,6 @@ def guardar_venta(
 # ======================================================
 # INTERFAZ
 # ======================================================
-st.markdown(
-    "<h1 style='color:#FF1F1F;'>🧾 Registro de ventas 8° A</h1>",
-    unsafe_allow_html=True
-)
-
-st.markdown(
-    "<h3 style='color:#555555; margin-top:-20px;'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Colegio Gabriela Mistral</h3>",
-    unsafe_allow_html=True
-)
-
 try:
     precios = leer_precios()
 except Exception as e:
