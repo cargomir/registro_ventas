@@ -57,6 +57,11 @@ def check_password():
 mostrar_header()
 
 if not check_password():
+    col1, col2, col3 = st.columns([1,2,1])
+    
+    with col2:
+        st.image("imagenes/completo.png", use_container_width=True)
+
     st.stop()
 
 col1, col2 = st.columns([4, 1])
@@ -405,7 +410,7 @@ else:
         "fecha": "Fecha",
         "hora": "Hora",
         "vendedor": "Vendedor/a",
-        "nombre_comprador": "Comprador",
+        "nombre_comprador": "Comprador/a",
         "cantidad_promo_completo_bebida": "Promo completo + bebida",
         "cantidad_completos_solos": "Completos (solos)",
         "cantidad_bebidas_solas": "Bebidas (solas)",
