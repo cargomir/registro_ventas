@@ -33,11 +33,18 @@ def check_password():
     if st.session_state.authenticated:
         return True
 
+    # 🌭 Imagen (BAJO header, ANTES del login)
+    col1, col2, col3 = st.columns([1,2,1])
+    with col2:
+        st.image("imagenes/completo.png", use_container_width=True)
+
+    # 🔒 Título login
     st.markdown(
         "<h3 style='color:#2F5FBF;'>🔒 Ingreso a la aplicación</h3>",
         unsafe_allow_html=True
     )
 
+    # 👇 Inputs
     vendedor = st.text_input("Nombre del vendedor o vendedora")
     password = st.text_input("Ingresa la contraseña", type="password")
 
@@ -57,11 +64,6 @@ def check_password():
 mostrar_header()
 
 if not check_password():
-    col1, col2, col3 = st.columns([1,2,1])
-    
-    with col2:
-        st.image("imagenes/completo.png", use_container_width=True)
-
     st.stop()
 
 col1, col2 = st.columns([4, 1])
