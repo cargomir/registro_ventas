@@ -65,7 +65,7 @@ with col1:
     st.caption(f"Vendedor/a en turno: {st.session_state.vendedor_actual}")
 
 with col2:
-    if st.button("Cerrar sesión"):
+    if st.button("⏻ Cerrar sesión", type="secondary"):
         st.session_state.authenticated = False
         st.session_state.vendedor_actual = ""
         st.rerun()
