@@ -59,13 +59,13 @@ if not check_password():
 # 👇 Mostrar Header solo después de autenticarse
 mostrar_header()
 
-col1, col2 = st.columns([4, 1])
+col1, col2, col3 = st.columns([6, 1, 1])
 
 with col1:
     st.caption(f"Vendedor/a en turno: {st.session_state.vendedor_actual}")
 
-with col2:
-    if st.button("⏻ Cerrar sesión", type="secondary"):
+with col3:
+    if st.button("⏻ Cerrar sesión", type="primary"):
         st.session_state.authenticated = False
         st.session_state.vendedor_actual = ""
         st.rerun()
