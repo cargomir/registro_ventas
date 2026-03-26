@@ -7,7 +7,7 @@ from zoneinfo import ZoneInfo
 # ======================================================
 # CONFIGURACIÓN
 # ======================================================
-st.set_page_config(page_title="Registro de ventas", page_icon="🌭", layout="centered")
+st.set_page_config(page_title="Registro de ventas 8°A", page_icon="🌭", layout="centered")
 
 SHEET_ID = "11yoIjPuw6v2LxOZ2Hmbg3BxVv-Qzn-jISOxNKTMjO_I"
 HOJA_VENTAS = "Ventas"
