@@ -59,23 +59,13 @@ if not check_password():
 # 👇 Mostrar Header solo después de autenticarse
 mostrar_header()
 
-# 🔹 CSS para achicar botón
-st.markdown("""
-<style>
-div[data-testid="column"] div.stButton > button {
-    padding: 0.25rem 0.6rem;
-    font-size: 8px;
-}
-</style>
-""", unsafe_allow_html=True)
-
 col1, col2 = st.columns([4, 1])
 
 with col1:
     st.caption(f"Vendedor/a en turno: {st.session_state.vendedor_actual}")
 
 with col2:
-    if st.button("⏻ Cerrar sesión", type="primary"):
+    if st.button("🔒 Cerrar sesión", type="primary"):
         st.session_state.authenticated = False
         st.session_state.vendedor_actual = ""
         st.rerun()
