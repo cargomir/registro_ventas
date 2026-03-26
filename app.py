@@ -61,7 +61,7 @@ def check_password():
     return False
 
 
-mostrar_header()
+#mostrar_header()
 
 if not check_password():
     st.stop()
