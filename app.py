@@ -13,15 +13,7 @@ st.set_page_config(page_title="Registro de ventas 8°A", page_icon="🌭", layou
 # ACCESO CON CONTRASEÑA
 # ======================================================
 def mostrar_header():
-    st.markdown(
-        "<h1 style='color:#FF1F1F;'>🧾 Registro de ventas 8° A</h1>",
-        unsafe_allow_html=True
-    )
-
-    st.markdown(
-        "<h3 style='color:#555555; margin-top:-20px;'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Colegio Gabriela Mistral</h3>",
-        unsafe_allow_html=True
-    )
+    st.image("imagenes/Head.png", use_container_width=True)
  
 def check_password():
     if "authenticated" not in st.session_state:
