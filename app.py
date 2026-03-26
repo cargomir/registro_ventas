@@ -59,6 +59,16 @@ if not check_password():
 # 👇 Mostrar Header solo después de autenticarse
 mostrar_header()
 
+# 🔹 CSS para achicar botón
+st.markdown("""
+<style>
+div[data-testid="column"] div.stButton > button {
+    padding: 0.25rem 0.6rem;
+    font-size: 12px;
+}
+</style>
+""", unsafe_allow_html=True)
+
 col1, col2 = st.columns([4, 1])
 
 with col1:
