@@ -272,8 +272,8 @@ if st.session_state.limpiar_formulario:
 df_ventas = leer_ventas()
 
 tab1, tab2, tab3, tab4 = st.tabs([
-    "🧾 Registro venta",
-    "🌭 Últimas ventas registradas",
+    "🧾 Registro ventas",
+    "🌭 Últimas ventas",
     "📊 Resumen ventas",
     "💲 Consultar precios"
 ])
@@ -282,6 +282,11 @@ tab1, tab2, tab3, tab4 = st.tabs([
 # TAB 1: REGISTRO VENTA
 # ======================================================
 with tab1:
+    st.markdown(
+        "<h2 style='color:#FF1F1F;'>🧾 Ingreso ventas</h2>",
+        unsafe_allow_html=True
+    )
+    
     with st.form("formulario_venta", clear_on_submit=False):
         nombre_comprador = st.text_input("NOMBRE COMPRADOR", key="nombre_comprador")
 
@@ -395,7 +400,7 @@ with tab1:
 # ======================================================
 with tab2:
     st.markdown(
-        "<h2 style='color:#FF1F1F;'>🌭 Últimas ventas</h2>",
+        "<h2 style='color:#FF1F1F;'>🌭 Últimas ventas registradas</h2>",
         unsafe_allow_html=True
     )
 
