@@ -63,7 +63,7 @@ col1, col2 = st.columns([4, 1])
 
 with col1:
     st.markdown(
-        f"<span style='color:#FF1F1F;'>Vendedor/a en turno: {st.session_state.vendedor_actual}</span>",
+        f"<span style='color:#2F5FBF;'>Vendedor/a en turno: {st.session_state.vendedor_actual}</span>",
         unsafe_allow_html=True
     )
 
