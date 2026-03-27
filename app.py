@@ -173,7 +173,6 @@ def leer_precios():
         raise RuntimeError(f"No fue posible leer la hoja de precios: {e}")
 
 
-@st.cache_data(ttl=60)
 def leer_ventas():
     try:
         spreadsheet = abrir_spreadsheet()
@@ -618,6 +617,7 @@ if st.session_state.rol_actual == "vendedor":
 
             # Renombrar columnas
             df_ventas_mostrar = df_ventas_mostrar.rename(columns={
+                "numero_pedido": "Número pedido",
                 "fecha": "Fecha",
                 "hora": "Hora",
                 "vendedor": "Vendedor/a",
@@ -629,7 +629,8 @@ if st.session_state.rol_actual == "vendedor":
                 "cantidad_te_solos": "Tés (solos)",
                 "total_venta": "Total ($)",
                 "forma_pago": "Forma de pago",
-                #"observaciones": "Observaciones"
+                #"observaciones": "Observaciones",
+                "estado_pedido": "Estado pedido",
             })
 
             st.dataframe(
