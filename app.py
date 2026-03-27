@@ -395,7 +395,7 @@ with tab1:
 # ======================================================
 with tab2:
     st.markdown(
-        "<h2 style='color:#FF1F1F;'>🌭 Últimas ventas registradas</h2>",
+        "<h2 style='color:#FF1F1F;'>🌭 Últimas ventas</h2>",
         unsafe_allow_html=True
     )
 
@@ -522,7 +522,7 @@ with tab4:
         "<h2 style='color:#FF1F1F;'>💲 Consultar precios</h2>",
         unsafe_allow_html=True
     )
-    
+
     df_precios_mostrar = pd.DataFrame({
         "Producto": [
             "Promoción completo + bebida",
