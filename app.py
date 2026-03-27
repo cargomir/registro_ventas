@@ -269,165 +269,186 @@ if st.session_state.limpiar_formulario:
     st.session_state.forma_pago = "Seleccione una opción"
     st.session_state.limpiar_formulario = False
 
-with st.form("formulario_venta", clear_on_submit=False):
-    nombre_comprador = st.text_input("NOMBRE COMPRADOR", key="nombre_comprador")
+df_ventas = leer_ventas()
 
-    col1, col2 = st.columns(2)
+tab1, tab2, tab3, tab4 = st.tabs([
+    "🧾 Registro venta",
+    "🌭 Últimas ventas registradas",
+    "📊 Resumen ventas",
+    "💲 Consultar precios"
+])
 
-    with col1:
-        cantidad_promo = st.number_input(
-            "Cantidad promo completo + bebestible",
-            min_value=0,
-            step=1,
-            key="cantidad_promo"
+# ======================================================
+# TAB 1: REGISTRO VENTA
+# ======================================================
+with tab1:
+    with st.form("formulario_venta", clear_on_submit=False):
+        nombre_comprador = st.text_input("NOMBRE COMPRADOR", key="nombre_comprador")
+
+        col1, col2 = st.columns(2)
+
+        with col1:
+            cantidad_promo = st.number_input(
+                "Cantidad promo completo + bebestible",
+                min_value=0,
+                step=1,
+                key="cantidad_promo"
+            )
+
+        with col2:
+            cantidad_completos = st.number_input(
+                "Cantidad de completos solos",
+                min_value=0,
+                step=1,
+                key="cantidad_completos"
+            )
+
+            cantidad_bebidas = st.number_input(
+                "Cantidad de bebidas solas",
+                min_value=0,
+                step=1,
+                key="cantidad_bebidas"
+            )
+
+            cantidad_cafes = st.number_input(
+                "Cantidad de café(s) solos",
+                min_value=0,
+                step=1,
+                key="cantidad_cafes"
+            )
+
+            cantidad_te = st.number_input(
+                "Cantidad de té(s) solos",
+                min_value=0,
+                step=1,
+                key="cantidad_te"
+            )
+        
+        # observaciones = st.text_area("📝 Observaciones del pedido (opcional)", placeholder="Ej: Un completo sin mayo, café sin azúcar...")
+        
+        forma_pago = st.selectbox(
+            "FORMA DE PAGO",
+            options=["Seleccione una opción", "Efectivo", "Transferencia"],
+            key="forma_pago"
         )
 
-    with col2:
-        cantidad_completos = st.number_input(
-            "Cantidad de completos solos",
-            min_value=0,
-            step=1,
-            key="cantidad_completos"
+        total_estimado = (
+            int(cantidad_promo) * precios["promocion_completo_bebida"]
+            + int(cantidad_bebidas) * precios["bebida_sola"]
+            + int(cantidad_te) * precios["te_solo"]
+            + int(cantidad_cafes) * precios["cafe_solo"]
+            + int(cantidad_completos) * precios["completo_solo"]
         )
 
-        cantidad_bebidas = st.number_input(
-            "Cantidad de bebidas solas",
-            min_value=0,
-            step=1,
-            key="cantidad_bebidas"
+        guardar = st.form_submit_button("💾 Guardar venta", type="primary")
+
+        nombre_mostrar = nombre_comprador if nombre_comprador else st.session_state.get("ultimo_nombre", "")
+        total_mostrar = total_estimado if nombre_comprador else st.session_state.get("ultimo_total", 0)
+
+        st.markdown(
+            f"<h2 style='color:#2F5FBF;'>Total a pagar ({nombre_mostrar}): ${total_mostrar:,}</h2>".replace(",", "."),
+            unsafe_allow_html=True
         )
 
-        cantidad_cafes = st.number_input(
-            "Cantidad de café(s) solos",
-            min_value=0,
-            step=1,
-            key="cantidad_cafes"
-        )
+        if guardar:
+            total_items = (
+                int(cantidad_promo)
+                + int(cantidad_completos)
+                + int(cantidad_bebidas)
+                + int(cantidad_te)
+                + int(cantidad_cafes)
+            )
 
-        cantidad_te = st.number_input(
-            "Cantidad de té(s) solos",
-            min_value=0,
-            step=1,
-            key="cantidad_te"
-        )
-    
-    # observaciones = st.text_area("📝 Observaciones del pedido (opcional)", placeholder="Ej: Un completo sin mayo, café sin azúcar...")
-    
-    forma_pago = st.selectbox(
-        "FORMA DE PAGO",
-        options=["Seleccione una opción", "Efectivo", "Transferencia"],
-        key="forma_pago"
-    )
+            if not nombre_comprador.strip():
+                st.error("Debes ingresar el nombre del comprador.")
+            elif total_items == 0:
+                st.error("Debes registrar al menos un producto.")
+            elif forma_pago == "Seleccione una opción":
+                st.error("Debes seleccionar una forma de pago.")
+            else:
+                try:
+                    guardar_venta(
+                        vendedor=st.session_state.vendedor_actual,
+                        nombre_comprador=nombre_comprador,
+                        cantidad_promo=int(cantidad_promo),
+                        cantidad_completos=int(cantidad_completos),
+                        cantidad_bebidas=int(cantidad_bebidas),
+                        cantidad_te=int(cantidad_te),
+                        cantidad_cafes=int(cantidad_cafes),
+                        precios=precios,
+                        forma_pago=forma_pago,
+                        #observaciones=observaciones,
+                    )
+                    st.success("Venta guardada correctamente.")
 
-    total_estimado = (
-        int(cantidad_promo) * precios["promocion_completo_bebida"]
-        + int(cantidad_bebidas) * precios["bebida_sola"]
-        + int(cantidad_te) * precios["te_solo"]
-        + int(cantidad_cafes) * precios["cafe_solo"]
-        + int(cantidad_completos) * precios["completo_solo"]
-    )
+                    st.session_state.ultimo_nombre = nombre_comprador
+                    st.session_state.ultimo_total = total_estimado
 
-    guardar = st.form_submit_button("💾 Guardar venta", type="primary")
+                    st.session_state.limpiar_formulario = True
+                    st.rerun()
 
-    nombre_mostrar = nombre_comprador if nombre_comprador else st.session_state.get("ultimo_nombre", "")
-    total_mostrar = total_estimado if nombre_comprador else st.session_state.get("ultimo_total", 0)
+                except Exception as e:
+                    st.error(f"No fue posible guardar la venta: {e}")
 
+# ======================================================
+# TAB 2: ÚLTIMAS VENTAS
+# ======================================================
+with tab2:
     st.markdown(
-        f"<h2 style='color:#2F5FBF;'>Total a pagar ({nombre_mostrar}): ${total_mostrar:,}</h2>".replace(",", "."),
+        "<h2 style='color:#FF1F1F;'>🌭 Últimas ventas registradas</h2>",
         unsafe_allow_html=True
     )
 
-    if guardar:
-        total_items = (
-            int(cantidad_promo)
-            + int(cantidad_completos)
-            + int(cantidad_bebidas)
-            + int(cantidad_te)
-            + int(cantidad_cafes)
+    if df_ventas.empty:
+        st.info("Aún no hay ventas registradas.")
+    else:
+        df_ventas["datetime_orden"] = pd.to_datetime(
+            df_ventas["fecha"].astype(str) + " " + df_ventas["hora"].astype(str),
+            errors="coerce"
         )
 
-        if not nombre_comprador.strip():
-            st.error("Debes ingresar el nombre del comprador.")
-        elif total_items == 0:
-            st.error("Debes registrar al menos un producto.")
-        elif forma_pago == "Seleccione una opción":
-            st.error("Debes seleccionar una forma de pago.")
-        else:
-            try:
-                guardar_venta(
-                    vendedor=st.session_state.vendedor_actual,
-                    nombre_comprador=nombre_comprador,
-                    cantidad_promo=int(cantidad_promo),
-                    cantidad_completos=int(cantidad_completos),
-                    cantidad_bebidas=int(cantidad_bebidas),
-                    cantidad_te=int(cantidad_te),
-                    cantidad_cafes=int(cantidad_cafes),
-                    precios=precios,
-                    forma_pago=forma_pago,
-                    #observaciones=observaciones,
-                )
-                st.success("Venta guardada correctamente.")
+        df_ventas_mostrar = (
+            df_ventas
+            .sort_values("datetime_orden", ascending=False)
+            .drop(columns=["datetime_orden"])
+            .head(20)
+        )
 
-                st.session_state.ultimo_nombre = nombre_comprador
-                st.session_state.ultimo_total = total_estimado
+        # Renombrar columnas
+        df_ventas_mostrar = df_ventas_mostrar.rename(columns={
+            "fecha": "Fecha",
+            "hora": "Hora",
+            "vendedor": "Vendedor/a",
+            "nombre_comprador": "Comprador/a",
+            "cantidad_promo_completo_bebida": "Promos",
+            "cantidad_completos_solos": "Completos (solos)",
+            "cantidad_bebidas_solas": "Bebidas (solas)",
+            "cantidad_cafes_solos": "Cafés (solos)",
+            "cantidad_te_solos": "Tés (solos)",
+            "total_venta": "Total ($)",
+            "forma_pago": "Forma de pago",
+            #"observaciones": "Observaciones"
+        })
 
-                st.session_state.limpiar_formulario = True
-                st.rerun()
+        st.dataframe(
+        df_ventas_mostrar,
+        width="stretch",
+        hide_index=True,
+        column_config={
+            "Fecha": None,
+            "Hora": None,
+            "Vendedor/a": None,
+        }
+        )
 
-            except Exception as e:
-                st.error(f"No fue posible guardar la venta: {e}")
-
-st.divider()
-
-st.markdown(
-    "<h2 style='color:#FF1F1F;'>🌭 Últimas ventas registradas</h2>",
-    unsafe_allow_html=True
-)
-df_ventas = leer_ventas()
-
-if df_ventas.empty:
-    st.info("Aún no hay ventas registradas.")
-else:
-    df_ventas["datetime_orden"] = pd.to_datetime(
-        df_ventas["fecha"].astype(str) + " " + df_ventas["hora"].astype(str),
-        errors="coerce"
+# ======================================================
+# TAB 3: RESUMEN VENTAS
+# ======================================================
+with tab3:
+    st.markdown(
+        "<h2 style='color:#FF1F1F;'>📊 Resumen de ventas</h2>",
+        unsafe_allow_html=True
     )
-
-    df_ventas_mostrar = (
-        df_ventas
-        .sort_values("datetime_orden", ascending=False)
-        .drop(columns=["datetime_orden"])
-        .head(20)
-    )
-
-    # Renombrar columnas
-    df_ventas_mostrar = df_ventas_mostrar.rename(columns={
-        "fecha": "Fecha",
-        "hora": "Hora",
-        "vendedor": "Vendedor/a",
-        "nombre_comprador": "Comprador/a",
-        "cantidad_promo_completo_bebida": "Promos",
-        "cantidad_completos_solos": "Completos (solos)",
-        "cantidad_bebidas_solas": "Bebidas (solas)",
-        "cantidad_cafes_solos": "Cafés (solos)",
-        "cantidad_te_solos": "Tés (solos)",
-        "total_venta": "Total ($)",
-        "forma_pago": "Forma de pago",
-        #"observaciones": "Observaciones"
-    })
-
-    st.dataframe(
-    df_ventas_mostrar,
-    width="stretch",
-    hide_index=True,
-    column_config={
-        "Fecha": None,
-        "Hora": None,
-        "Vendedor/a": None,
-    }
-    )
-
-with st.expander("📊 Resumen de ventas"):
     if df_ventas.empty:
         st.info("Aún no hay ventas registradas.")
     else:
@@ -493,7 +514,15 @@ with st.expander("📊 Resumen de ventas"):
             f"${total_general:,.0f}".replace(",", ".")
         )
 
-with st.expander("💲Consultar precios"):
+# ======================================================
+# TAB 4: CONSULTAR PRECIOS
+# ======================================================
+with tab4:
+    st.markdown(
+        "<h2 style='color:#FF1F1F;'>💲 Consultar precios</h2>",
+        unsafe_allow_html=True
+    )
+    
     df_precios_mostrar = pd.DataFrame({
         "Producto": [
             "Promoción completo + bebida",
