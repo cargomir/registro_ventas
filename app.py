@@ -317,13 +317,6 @@ def vista_coordinador():
 
     st.markdown(f"## 📋 Pedidos pendientes ({len(pendientes)})")
 
-    st.markdown("")  # pequeño espacio
-    col1, col2 = st.columns([3, 1])
-
-    with col2:
-        if st.button("🔄 Actualizar", type="primary"):
-            st.rerun()
-
     if df.empty:
         st.info("No hay pedidos.")
         return
@@ -378,6 +371,12 @@ def vista_coordinador():
         },
         disabled=["Pedido", "Hora", "Comprador/a", "Compra"]
     )
+
+    # Botón bajo la tabla
+    col1, col2 = st.columns([3, 1])
+    with col2:
+        if st.button("🔄 Actualizar", type="primary"):
+            st.rerun()
 
     # Detectar pedidos marcados
     pedidos_a_entregar = edited_df[edited_df["Entregar"] == True]
