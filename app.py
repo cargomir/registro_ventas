@@ -62,7 +62,10 @@ mostrar_header()
 col1, col2 = st.columns([4, 1])
 
 with col1:
-    st.caption(f"Vendedor/a en turno: {st.session_state.vendedor_actual}")
+    st.markdown(
+        f"<span style='color:#FF1F1F;'>Vendedor/a en turno: {st.session_state.vendedor_actual}</span>",
+        unsafe_allow_html=True
+    )
 
 with col2:
     if st.button("🔒 Cerrar sesión", type="primary"):
