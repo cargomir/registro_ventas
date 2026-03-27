@@ -354,6 +354,15 @@ def vista_coordinador():
     # 👇 columna interactiva
     df_mostrar["Entregar"] = False
 
+    st.markdown("""
+    <style>
+    /* Oculta menú de columnas en data editor */
+    div[data-testid="stDataEditor"] button {
+        visibility: hidden;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+
     edited_df = st.data_editor(
         df_mostrar,
         width="stretch",
@@ -364,7 +373,7 @@ def vista_coordinador():
                 help="Marcar pedido como entregado"
             )
         },
-        disabled=["Pedido", "Hora", "Comprador/a", "Compra", "Estado"]
+        disabled=["Pedido", "Hora", "Comprador/a", "Compra"]
     )
 
     # Detectar cambios
