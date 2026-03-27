@@ -612,6 +612,9 @@ if st.session_state.rol_actual == "vendedor":
             unsafe_allow_html=True
         )
 
+        st.markdown("")  # espacio
+        st.markdown("")  # más espacio
+
         if df_ventas.empty:
             st.info("Aún no hay ventas registradas.")
         else:
@@ -664,6 +667,9 @@ if st.session_state.rol_actual == "vendedor":
             "<h2 style='color:#FF1F1F;'>📊 Ventas totales</h2>",
             unsafe_allow_html=True
         )
+        st.markdown("")  # espacio
+        st.markdown("")  # más espacio
+
         if df_ventas.empty:
             st.info("Aún no hay ventas registradas.")
         else:
@@ -738,6 +744,9 @@ if st.session_state.rol_actual == "vendedor":
             unsafe_allow_html=True
         )
 
+        st.markdown("")  # espacio
+        st.markdown("")  # más espacio
+        
         df_precios_mostrar = pd.DataFrame({
             "Producto": [
                 "Promoción completo + bebida",
