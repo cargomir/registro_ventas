@@ -476,6 +476,11 @@ if st.session_state.rol_actual == "vendedor":
 
             guardar = st.form_submit_button("💾 Guardar venta", type="primary")
 
+            mensaje_formulario = st.empty()
+            if st.session_state.mensaje_confirmacion:
+                mensaje_formulario.success(st.session_state.mensaje_confirmacion)
+                st.session_state.mensaje_confirmacion
+
             nombre_mostrar = nombre_comprador if nombre_comprador else st.session_state.get("ultimo_nombre", "")
             total_mostrar = total_estimado if nombre_comprador else st.session_state.get("ultimo_total", 0)
 
@@ -494,11 +499,11 @@ if st.session_state.rol_actual == "vendedor":
                 )
 
                 if not nombre_comprador.strip():
-                    st.error("Debes ingresar el nombre del comprador.")
+                    mensaje_formulario.error("Debes ingresar el nombre del comprador.")
                 elif total_items == 0:
-                    st.error("Debes registrar al menos un producto.")
+                    mensaje_formulario.error("Debes registrar al menos un producto.")
                 elif forma_pago == "Seleccione una opción":
-                    st.error("Debes seleccionar una forma de pago.")
+                    mensaje_formulario.error("Debes seleccionar una forma de pago.")
                 else:
                     try:
                         numero_pedido = guardar_venta(
