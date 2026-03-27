@@ -308,11 +308,6 @@ def construir_compra(fila):
 def vista_coordinador():
     df = leer_ventas()
 
-    if df.empty:
-        st.markdown("## 📋 Pedidos pendientes (0)")
-        st.info("No hay pedidos.")
-        return
-
     if "estado_pedido" not in df.columns:
         df["estado_pedido"] = "Pendiente"
 
@@ -321,6 +316,17 @@ def vista_coordinador():
     ].copy()
 
     st.markdown(f"## 📋 Pedidos pendientes ({len(pendientes)})")
+
+    st.markdown("")  # pequeño espacio
+    col1, col2 = st.columns([3, 1])
+
+    with col2:
+        if st.button("🔄 Actualizar", type="primary"):
+            st.rerun()
+
+    if df.empty:
+        st.info("No hay pedidos.")
+        return
 
     if pendientes.empty:
         st.success("No hay pedidos pendientes.")
@@ -336,8 +342,6 @@ def vista_coordinador():
     # Construir resumen
     pendientes["compra"] = pendientes.apply(construir_compra, axis=1)
 
-    cantidad_pendientes = len(pendientes)
-
     # Dataframe a mostrar
     df_mostrar = pendientes[[
         "numero_pedido",
@@ -351,12 +355,11 @@ def vista_coordinador():
         "compra": "Compra"
     })
 
-    # 👇 columna interactiva
+    # columna interactiva
     df_mostrar["Entregar"] = False
 
     st.markdown("""
     <style>
-    /* Oculta menú de columnas en data editor */
     div[data-testid="stDataEditor"] button {
         visibility: hidden;
     }
@@ -378,14 +381,6 @@ def vista_coordinador():
 
     # Detectar pedidos marcados
     pedidos_a_entregar = edited_df[edited_df["Entregar"] == True]
-
-    st.markdown("")  # pequeño espacio
-
-    col1, col2 = st.columns([3, 1])
-    
-    with col2:
-        if st.button("🔄 Actualizar", type="primary"):
-            st.rerun()
 
     # Ejecutar entrega
     if not pedidos_a_entregar.empty:
