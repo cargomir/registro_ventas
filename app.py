@@ -314,7 +314,7 @@ def vista_coordinador():
         st.markdown("## 📋 Pedidos pendientes")
 
     with col2:
-        if st.button("🔄 Actualizar"):
+        if st.button("🔄 Actualizar", type="primary"):
             leer_ventas.clear()
             st.rerun()
 
