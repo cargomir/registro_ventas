@@ -745,8 +745,7 @@ if st.session_state.rol_actual == "vendedor":
         )
 
         st.markdown("")  # espacio
-        st.markdown("")  # más espacio
-        
+
         df_precios_mostrar = pd.DataFrame({
             "Producto": [
                 "Promoción completo + bebida",
