@@ -356,6 +356,9 @@ if "forma_pago" not in st.session_state:
 if "limpiar_formulario" not in st.session_state:
     st.session_state.limpiar_formulario = False
 
+if "mensaje_confirmacion" not in st.session_state:
+    st.session_state.mensaje_confirmacion = ""
+
 if st.session_state.limpiar_formulario:
     st.session_state.nombre_comprador = ""
     st.session_state.cantidad_promo = 0
@@ -409,6 +412,10 @@ if st.session_state.rol_actual == "vendedor":
             unsafe_allow_html=True
         )
         
+        if st.session_state.mensaje_confirmacion:
+            st.success(st.session_state.mensaje_confirmacion)
+            st.session_state.mensaje_confirmacion = ""
+
         with st.form("formulario_venta", clear_on_submit=False):
             nombre_comprador = st.text_input("NOMBRE COMPRADOR", key="nombre_comprador")
 
@@ -506,7 +513,7 @@ if st.session_state.rol_actual == "vendedor":
                             forma_pago=forma_pago,
                         )
 
-                        st.success(f"Pedido #{numero_pedido} guardado correctamente")
+                        st.session_state.mensaje_confirmacion = f"Pedido #{numero_pedido} guardado correctamente"
 
                         st.session_state.ultimo_nombre = nombre_comprador
                         st.session_state.ultimo_total = total_estimado
