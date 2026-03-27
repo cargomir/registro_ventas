@@ -400,7 +400,7 @@ with tab1:
 # ======================================================
 with tab2:
     st.markdown(
-        "<h2 style='color:#FF1F1F;'>🌭 Últimas ventas registradas</h2>",
+        "<h2 style='color:#FF1F1F;'>🌭 Últimas ventas</h2>",
         unsafe_allow_html=True
     )
 
@@ -451,7 +451,7 @@ with tab2:
 # ======================================================
 with tab3:
     st.markdown(
-        "<h2 style='color:#FF1F1F;'>📊 Resumen de ventas</h2>",
+        "<h2 style='color:#FF1F1F;'>📊 Resumen ventas</h2>",
         unsafe_allow_html=True
     )
     if df_ventas.empty:
