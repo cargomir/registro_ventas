@@ -328,65 +328,60 @@ def vista_coordinador():
         st.success("No hay pedidos pendientes.")
         return
 
+    # Limpiar tipos
     pendientes["numero_pedido"] = pd.to_numeric(
         pendientes["numero_pedido"], errors="coerce"
     )
     pendientes = pendientes.dropna(subset=["numero_pedido"]).copy()
     pendientes["numero_pedido"] = pendientes["numero_pedido"].astype(int)
 
+    # Construir resumen
     pendientes["compra"] = pendientes.apply(construir_compra, axis=1)
 
-    pendientes = pendientes.sort_values("numero_pedido", ascending=True)
+    # Dataframe a mostrar
+    df_mostrar = pendientes[[
+        "numero_pedido",
+        "hora",
+        "nombre_comprador",
+        "compra",
+        "estado_pedido"
+    ]].rename(columns={
+        "numero_pedido": "Pedido",
+        "hora": "Hora",
+        "nombre_comprador": "Comprador/a",
+        "compra": "Compra",
+        "estado_pedido": "Estado"
+    })
 
-    # Encabezado
-    col1, col2, col3, col4, col5, col6 = st.columns([1, 1, 2, 4, 2, 1])
+    # 👇 columna interactiva
+    df_mostrar["Entregar"] = False
 
-    with col1:
-        st.markdown("**Pedido**")
-    with col2:
-        st.markdown("**Hora**")
-    with col3:
-        st.markdown("**Comprador/a**")
-    with col4:
-        st.markdown("**Compra**")
-    with col5:
-        st.markdown("**Estado**")
-    with col6:
-        st.markdown("**Ticket**")
+    edited_df = st.data_editor(
+        df_mostrar,
+        width="stretch",
+        hide_index=True,
+        column_config={
+            "Entregar": st.column_config.CheckboxColumn(
+                "✅ Entregar",
+                help="Marcar pedido como entregado"
+            )
+        },
+        disabled=["Pedido", "Hora", "Comprador/a", "Compra", "Estado"]
+    )
 
-    st.markdown("---")
+    # Detectar cambios
+    pedidos_a_entregar = edited_df[edited_df["Entregar"] == True]
 
-    # Filas
-    for _, fila in pendientes.iterrows():
-        numero = int(fila["numero_pedido"])
+    if not pedidos_a_entregar.empty:
+        for _, fila in pedidos_a_entregar.iterrows():
+            numero = int(fila["Pedido"])
+            try:
+                marcar_pedido_entregado(numero)
+            except Exception as e:
+                st.error(f"No fue posible actualizar el pedido {numero}: {e}")
 
-        col1, col2, col3, col4, col5, col6 = st.columns([1, 1, 2, 4, 2, 1])
-
-        with col1:
-            st.write(numero)
-
-        with col2:
-            st.write(str(fila["hora"]))
-
-        with col3:
-            st.write(str(fila["nombre_comprador"]))
-
-        with col4:
-            st.write(str(fila["compra"]))
-
-        with col5:
-            st.write(str(fila["estado_pedido"]))
-
-        with col6:
-            if st.button("✅", key=f"entregado_{numero}"):
-                try:
-                    marcar_pedido_entregado(numero)
-                    st.success(f"Pedido #{numero} marcado como entregado.")
-                    st.rerun()
-                except Exception as e:
-                    st.error(f"No fue posible actualizar el pedido: {e}")
-
-        st.markdown("---")
+        st.success("Pedidos actualizados correctamente")
+        st.rerun()
             
 # ======================================================
 # INTERFAZ
