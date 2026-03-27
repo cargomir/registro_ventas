@@ -303,8 +303,12 @@ def vista_coordinador():
         return
 
     pendientes["numero_pedido"] = pd.to_numeric(
-        pendientes["numero_pedido"], errors="coerce"
-    )
+    pendientes["numero_pedido"], errors="coerce"
+)
+
+    pendientes = pendientes.dropna(subset=["numero_pedido"]).copy()
+    pendientes["numero_pedido"] = pendientes["numero_pedido"].astype(int)
+
     pendientes = pendientes.sort_values("numero_pedido", ascending=True)
 
     for _, fila in pendientes.iterrows():
