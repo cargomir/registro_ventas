@@ -670,3 +670,6 @@ if st.session_state.rol_actual == "vendedor":
             width="stretch",
             hide_index=True
         )
+
+elif st.session_state.rol_actual == "coordinador":
+    vista_coordinador()
