@@ -319,10 +319,18 @@ def vista_coordinador():
 
     if df.empty:
         st.info("No hay pedidos.")
+        col1, col2 = st.columns([3, 1])
+        with col2:
+            if st.button("🔄 Actualizar", type="primary"):
+                st.rerun()
         return
 
     if pendientes.empty:
         st.success("No hay pedidos pendientes.")
+        col1, col2 = st.columns([3, 1])
+        with col2:
+            if st.button("🔄 Actualizar", type="primary"):
+                st.rerun()
         return
 
     # Limpiar tipos
