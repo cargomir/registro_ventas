@@ -271,6 +271,30 @@ if st.session_state.limpiar_formulario:
 
 df_ventas = leer_ventas()
 
+st.markdown("""
+<style>
+button[data-baseweb="tab"] {
+    font-size: 16px;
+    font-weight: 600;
+    padding: 10px 18px;
+    border-radius: 8px 8px 0 0;
+    background-color: #f0f2f6;
+    margin-right: 6px;
+    transition: all 0.2s ease-in-out;
+}
+
+button[data-baseweb="tab"]:hover {
+    background-color: #e0e0e0;
+}
+
+button[data-baseweb="tab"][aria-selected="true"] {
+    background-color: #FF1F1F;
+    color: white;
+    border-bottom: 3px solid #FF1F1F;
+}
+</style>
+""", unsafe_allow_html=True)
+
 tab1, tab2, tab3, tab4 = st.tabs([
     "🧾 Registro ventas",
     "🌭 Últimas ventas",
