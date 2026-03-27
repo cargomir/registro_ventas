@@ -412,10 +412,6 @@ if st.session_state.rol_actual == "vendedor":
             unsafe_allow_html=True
         )
         
-        if st.session_state.mensaje_confirmacion:
-            st.success(st.session_state.mensaje_confirmacion)
-            st.session_state.mensaje_confirmacion = ""
-
         with st.form("formulario_venta", clear_on_submit=False):
             nombre_comprador = st.text_input("NOMBRE COMPRADOR", key="nombre_comprador")
 
@@ -479,7 +475,7 @@ if st.session_state.rol_actual == "vendedor":
             mensaje_formulario = st.empty()
             if st.session_state.mensaje_confirmacion:
                 mensaje_formulario.success(st.session_state.mensaje_confirmacion)
-                st.session_state.mensaje_confirmacion
+                st.session_state.mensaje_confirmacion = ""
 
             nombre_mostrar = nombre_comprador if nombre_comprador else st.session_state.get("ultimo_nombre", "")
             total_mostrar = total_estimado if nombre_comprador else st.session_state.get("ultimo_total", 0)
