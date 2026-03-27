@@ -317,11 +317,11 @@ def vista_coordinador():
         col1, col2 = st.columns([5, 1])
 
         with col1:
-            st.write(f"**Pedido #{int(numero)} - {fila['nombre_comprador']}**")
+            st.write(f"**Pedido #{numero} - {fila['nombre_comprador']}**")
 
         with col2:
-            if st.button("✅", key=f"ok_{int(numero)}"):
-                marcar_pedido_entregado(int(numero))
+            if st.button("✅", key=f"ok_{numero}"):
+                marcar_pedido_entregado(numero)
                 st.rerun()
 # ======================================================
 # INTERFAZ
