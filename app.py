@@ -338,40 +338,55 @@ def vista_coordinador():
 
     pendientes = pendientes.sort_values("numero_pedido", ascending=True)
 
-    pendientes_mostrar = pendientes[[
-        "numero_pedido",
-        "hora",
-        "nombre_comprador",
-        "compra",
-        "estado_pedido"
-    ]].rename(columns={
-        "numero_pedido": "Pedido",
-        "hora": "Hora",
-        "nombre_comprador": "Comprador/a",
-        "compra": "Compra",
-        "estado_pedido": "Estado"
-    })
+    # Encabezado
+    col1, col2, col3, col4, col5, col6 = st.columns([1, 1, 2, 4, 2, 1])
 
-    st.dataframe(
-        pendientes_mostrar,
-        width="stretch",
-        hide_index=True
-    )
+    with col1:
+        st.markdown("**Pedido**")
+    with col2:
+        st.markdown("**Hora**")
+    with col3:
+        st.markdown("**Comprador/a**")
+    with col4:
+        st.markdown("**Compra**")
+    with col5:
+        st.markdown("**Estado**")
+    with col6:
+        st.markdown("**Ticket**")
 
-    st.markdown("### ✅ Marcar pedido como entregado")
+    st.markdown("---")
 
-    pedido_seleccionado = st.selectbox(
-        "Selecciona el número de pedido",
-        options=pendientes["numero_pedido"].tolist()
-    )
+    # Filas
+    for _, fila in pendientes.iterrows():
+        numero = int(fila["numero_pedido"])
 
-    if st.button("Marcar como entregado", type="primary"):
-        try:
-            marcar_pedido_entregado(pedido_seleccionado)
-            st.success(f"Pedido #{pedido_seleccionado} marcado como entregado.")
-            st.rerun()
-        except Exception as e:
-            st.error(f"No fue posible actualizar el pedido: {e}")
+        col1, col2, col3, col4, col5, col6 = st.columns([1, 1, 2, 4, 2, 1])
+
+        with col1:
+            st.write(numero)
+
+        with col2:
+            st.write(str(fila["hora"]))
+
+        with col3:
+            st.write(str(fila["nombre_comprador"]))
+
+        with col4:
+            st.write(str(fila["compra"]))
+
+        with col5:
+            st.write(str(fila["estado_pedido"]))
+
+        with col6:
+            if st.button("✅", key=f"entregado_{numero}"):
+                try:
+                    marcar_pedido_entregado(numero)
+                    st.success(f"Pedido #{numero} marcado como entregado.")
+                    st.rerun()
+                except Exception as e:
+                    st.error(f"No fue posible actualizar el pedido: {e}")
+
+        st.markdown("---")
             
 # ======================================================
 # INTERFAZ
