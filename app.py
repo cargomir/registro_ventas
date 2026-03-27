@@ -308,7 +308,15 @@ def construir_compra(fila):
     return ", ".join(partes) if partes else "Sin productos"
 
 def vista_coordinador():
-    st.markdown("## 📋 Pedidos pendientes")
+    col1, col2 = st.columns([4, 1])
+
+    with col1:
+        st.markdown("## 📋 Pedidos pendientes")
+
+    with col2:
+        if st.button("🔄 Actualizar"):
+            leer_ventas.clear()
+            st.rerun()
 
     df = leer_ventas()
 
