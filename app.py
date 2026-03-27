@@ -308,15 +308,7 @@ def construir_compra(fila):
     return ", ".join(partes) if partes else "Sin productos"
 
 def vista_coordinador():
-    col1, col2 = st.columns([4, 1])
-
-    with col1:
-        st.markdown("## 📋 Pedidos pendientes")
-
-    with col2:
-        if st.button("🔄 Actualizar", type="primary"):
-            leer_ventas.clear()
-            st.rerun()
+    st.markdown("## 📋 Pedidos pendientes")
 
     df = leer_ventas()
 
@@ -383,9 +375,19 @@ def vista_coordinador():
         disabled=["Pedido", "Hora", "Comprador/a", "Compra"]
     )
 
-    # Detectar cambios
+    # Detectar pedidos marcados
     pedidos_a_entregar = edited_df[edited_df["Entregar"] == True]
 
+    st.markdown("")  # pequeño espacio
+
+    col1, col2 = st.columns([4, 1])
+
+    with col2:
+        if st.button("🔄 Actualizar", type="primary"):
+            leer_ventas.clear()
+            st.rerun()
+
+    # Ejecutar entrega
     if not pedidos_a_entregar.empty:
         for _, fila in pedidos_a_entregar.iterrows():
             numero = int(fila["Pedido"])
@@ -396,6 +398,20 @@ def vista_coordinador():
 
         st.success("Pedidos actualizados correctamente")
         st.rerun()
+
+        # Detectar cambios
+        pedidos_a_entregar = edited_df[edited_df["Entregar"] == True]
+
+        if not pedidos_a_entregar.empty:
+            for _, fila in pedidos_a_entregar.iterrows():
+                numero = int(fila["Pedido"])
+                try:
+                    marcar_pedido_entregado(numero)
+                except Exception as e:
+                    st.error(f"No fue posible actualizar el pedido {numero}: {e}")
+
+            st.success("Pedidos actualizados correctamente")
+            st.rerun()
             
 # ======================================================
 # INTERFAZ
