@@ -490,6 +490,8 @@ if st.session_state.rol_actual == "vendedor":
             unsafe_allow_html=True
         )
         
+        st.markdown("")  # espacio
+        
         with st.form("formulario_venta", clear_on_submit=False):
             nombre_comprador = st.text_input("NOMBRE COMPRADOR", key="nombre_comprador")
 
@@ -613,7 +615,6 @@ if st.session_state.rol_actual == "vendedor":
         )
 
         st.markdown("")  # espacio
-        st.markdown("")  # más espacio
 
         if df_ventas.empty:
             st.info("Aún no hay ventas registradas.")
@@ -668,7 +669,6 @@ if st.session_state.rol_actual == "vendedor":
             unsafe_allow_html=True
         )
         st.markdown("")  # espacio
-        st.markdown("")  # más espacio
 
         if df_ventas.empty:
             st.info("Aún no hay ventas registradas.")
