@@ -343,14 +343,12 @@ def vista_coordinador():
         "numero_pedido",
         "hora",
         "nombre_comprador",
-        "compra",
-        "estado_pedido"
+        "compra"
     ]].rename(columns={
         "numero_pedido": "Pedido",
         "hora": "Hora",
         "nombre_comprador": "Comprador/a",
-        "compra": "Compra",
-        "estado_pedido": "Estado"
+        "compra": "Compra"
     })
 
     # 👇 columna interactiva
@@ -362,7 +360,7 @@ def vista_coordinador():
         hide_index=True,
         column_config={
             "Entregar": st.column_config.CheckboxColumn(
-                "✅ Entregar",
+                "✅ Entregado",
                 help="Marcar pedido como entregado"
             )
         },
