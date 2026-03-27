@@ -308,66 +308,46 @@ def vista_coordinador():
     pendientes = pendientes.dropna(subset=["numero_pedido"]).copy()
     pendientes["numero_pedido"] = pendientes["numero_pedido"].astype(int)
 
-    # Asegurar columnas numéricas
-    columnas_numericas = [
-        "cantidad_promo_completo_bebida",
-        "cantidad_completos_solos",
-        "cantidad_bebidas_solas",
-        "cantidad_cafes_solos",
-        "cantidad_te_solos",
-        "total_venta",
-    ]
-
-    for col in columnas_numericas:
-        if col in pendientes.columns:
-            pendientes[col] = pd.to_numeric(pendientes[col], errors="coerce").fillna(0)
-
     pendientes = pendientes.sort_values("numero_pedido", ascending=True)
 
-    # Encabezados
-    encabezados = [
-        "Pedido", "Fecha", "Hora", "Vendedor/a", "Comprador/a",
-        "Promos", "Comp.", "Beb.", "Cafés", "Tés",
-        "Total", "Pago", "Estado", "✅"
-    ]
+    # Renombrar columnas para mostrar más claro
+    pendientes_mostrar = pendientes.rename(columns={
+        "numero_pedido": "Pedido",
+        "fecha": "Fecha",
+        "hora": "Hora",
+        "vendedor": "Vendedor/a",
+        "nombre_comprador": "Comprador/a",
+        "cantidad_promo_completo_bebida": "Promos",
+        "cantidad_completos_solos": "Completos (solos)",
+        "cantidad_bebidas_solas": "Bebidas (solas)",
+        "cantidad_cafes_solos": "Cafés (solos)",
+        "cantidad_te_solos": "Tés (solos)",
+        "total_venta": "Total ($)",
+        "forma_pago": "Forma de pago",
+        "estado_pedido": "Estado"
+    })
 
-    anchos = [0.8, 1.1, 1.0, 1.4, 1.6, 0.7, 0.7, 0.7, 0.7, 0.7, 1.0, 1.1, 1.0, 0.7]
+    st.dataframe(
+        pendientes_mostrar,
+        width="stretch",
+        hide_index=True
+    )
 
-    st.markdown("---")
-    cols_header = st.columns(anchos)
-    for col, titulo in zip(cols_header, encabezados):
-        col.markdown(f"**{titulo}**")
+    st.markdown("### ✅ Marcar pedido como entregado")
 
-    st.markdown("---")
+    pedido_seleccionado = st.selectbox(
+        "Selecciona el número de pedido",
+        options=pendientes["numero_pedido"].tolist()
+    )
 
-    # Filas
-    for _, fila in pendientes.iterrows():
-        cols = st.columns(anchos)
-
-        cols[0].write(int(fila["numero_pedido"]))
-        cols[1].write(str(fila.get("fecha", "")))
-        cols[2].write(str(fila.get("hora", "")))
-        cols[3].write(str(fila.get("vendedor", "")))
-        cols[4].write(str(fila.get("nombre_comprador", "")))
-        cols[5].write(int(fila.get("cantidad_promo_completo_bebida", 0)))
-        cols[6].write(int(fila.get("cantidad_completos_solos", 0)))
-        cols[7].write(int(fila.get("cantidad_bebidas_solas", 0)))
-        cols[8].write(int(fila.get("cantidad_cafes_solos", 0)))
-        cols[9].write(int(fila.get("cantidad_te_solos", 0)))
-        cols[10].write(f"${int(fila.get('total_venta', 0)):,}".replace(",", "."))
-        cols[11].write(str(fila.get("forma_pago", "")))
-        cols[12].write(str(fila.get("estado_pedido", "")))
-
-        if cols[13].button("✅", key=f"entregar_{int(fila['numero_pedido'])}"):
-            try:
-                marcar_pedido_entregado(int(fila["numero_pedido"]))
-                st.success(f"Pedido #{int(fila['numero_pedido'])} marcado como entregado.")
-                st.rerun()
-            except Exception as e:
-                st.error(f"No fue posible actualizar el pedido: {e}")
-
-        st.markdown("---")
-
+    if st.button("Marcar como entregado", type="primary"):
+        try:
+            marcar_pedido_entregado(pedido_seleccionado)
+            st.success(f"Pedido #{pedido_seleccionado} marcado como entregado.")
+            st.rerun()
+        except Exception as e:
+            st.error(f"No fue posible actualizar el pedido: {e}")
+            
 # ======================================================
 # INTERFAZ
 # ======================================================
