@@ -32,13 +32,13 @@ def check_password():
 
     # 🔒 Título login
     st.markdown(
-        "<h3 style='color:#FF1F1F;'>🔒 Ingreso a registro de ventas</h3>",
+        "<h3 style='color:#FF1F1F;'>🔒 Ingreso</h3>",
         unsafe_allow_html=True
     )
 
     # 👇 Inputs
-    vendedor = st.text_input("Nombre del vendedor o vendedora")
-    password = st.text_input("Ingresa la contraseña", type="password")
+    vendedor = st.text_input("Nombre vendedor@")
+    password = st.text_input("Contraseña", type="password")
 
     if st.button("Ingresar", type="primary"):
         if not vendedor.strip():
@@ -63,7 +63,7 @@ col1, col2 = st.columns([4, 1])
 
 with col1:
     st.markdown(
-        f"<span style='color:#2F5FBF;'>Vendedor/a en turno: {st.session_state.vendedor_actual}</span>",
+        f"<span style='color:#2F5FBF;'>Vendedor@: {st.session_state.vendedor_actual}</span>",
         unsafe_allow_html=True
     )
 
