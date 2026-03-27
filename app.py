@@ -315,7 +315,7 @@ def vista_coordinador():
         df["estado_pedido"].fillna("").astype(str).str.strip() != "Entregado"
     ].copy()
 
-    st.markdown(f"## 📋 Pedidos pendientes ({len(pendientes)})")
+    st.markdown(f"## 📋 Pedidos ({len(pendientes)})")
 
     if df.empty:
         st.info("No hay pedidos.")
