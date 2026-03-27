@@ -548,7 +548,7 @@ with tab3:
 # ======================================================
 with tab4:
     st.markdown(
-        "<h2 style='color:#FF1F1F;'>💲 Precios</h2>",
+        "<h2 style='color:#FF1F1F;'>💲Consultar precios</h2>",
         unsafe_allow_html=True
     )
 
