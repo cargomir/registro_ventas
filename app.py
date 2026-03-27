@@ -306,11 +306,10 @@ def construir_compra(fila):
     return ", ".join(partes) if partes else "Sin productos"
 
 def vista_coordinador():
-    st.markdown(f"## 📋 Pedidos pendientes ({len(pendientes)})")
-
     df = leer_ventas()
 
     if df.empty:
+        st.markdown("## 📋 Pedidos pendientes (0)")
         st.info("No hay pedidos.")
         return
 
@@ -320,6 +319,8 @@ def vista_coordinador():
     pendientes = df[
         df["estado_pedido"].fillna("").astype(str).str.strip() != "Entregado"
     ].copy()
+
+    st.markdown(f"## 📋 Pedidos pendientes ({len(pendientes)})")
 
     if pendientes.empty:
         st.success("No hay pedidos pendientes.")
