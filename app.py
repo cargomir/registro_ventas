@@ -282,6 +282,32 @@ def marcar_pedido_entregado(numero_pedido):
 
     raise ValueError(f"No se encontró el pedido {numero_pedido}.")
 
+def construir_compra(fila):
+    partes = []
+
+    promo = pd.to_numeric(pd.Series([fila.get("cantidad_promo_completo_bebida", 0)]), errors="coerce").fillna(0).iloc[0]
+    completos = pd.to_numeric(pd.Series([fila.get("cantidad_completos_solos", 0)]), errors="coerce").fillna(0).iloc[0]
+    bebidas = pd.to_numeric(pd.Series([fila.get("cantidad_bebidas_solas", 0)]), errors="coerce").fillna(0).iloc[0]
+    cafes = pd.to_numeric(pd.Series([fila.get("cantidad_cafes_solos", 0)]), errors="coerce").fillna(0).iloc[0]
+    tes = pd.to_numeric(pd.Series([fila.get("cantidad_te_solos", 0)]), errors="coerce").fillna(0).iloc[0]
+
+    if int(promo) > 0:
+        partes.append(f"{int(promo)} Promos")
+
+    if int(completos) > 0:
+        partes.append(f"{int(completos)} Completos")
+
+    if int(bebidas) > 0:
+        partes.append(f"{int(bebidas)} Bebidas")
+
+    if int(cafes) > 0:
+        partes.append(f"{int(cafes)} Cafés")
+
+    if int(tes) > 0:
+        partes.append(f"{int(tes)} Tés (solos)")
+
+    return ", ".join(partes) if partes else "Sin productos"
+
 def vista_coordinador():
     st.markdown("## 📋 Pedidos pendientes")
 
@@ -308,22 +334,21 @@ def vista_coordinador():
     pendientes = pendientes.dropna(subset=["numero_pedido"]).copy()
     pendientes["numero_pedido"] = pendientes["numero_pedido"].astype(int)
 
+    pendientes["compra"] = pendientes.apply(construir_compra, axis=1)
+
     pendientes = pendientes.sort_values("numero_pedido", ascending=True)
 
-    # Renombrar columnas para mostrar más claro
-    pendientes_mostrar = pendientes.rename(columns={
+    pendientes_mostrar = pendientes[[
+        "numero_pedido",
+        "hora",
+        "nombre_comprador",
+        "compra",
+        "estado_pedido"
+    ]].rename(columns={
         "numero_pedido": "Pedido",
-        "fecha": "Fecha",
         "hora": "Hora",
-        "vendedor": "Vendedor/a",
         "nombre_comprador": "Comprador/a",
-        "cantidad_promo_completo_bebida": "Promos",
-        "cantidad_completos_solos": "Completos (solos)",
-        "cantidad_bebidas_solas": "Bebidas (solas)",
-        "cantidad_cafes_solos": "Cafés (solos)",
-        "cantidad_te_solos": "Tés (solos)",
-        "total_venta": "Total ($)",
-        "forma_pago": "Forma de pago",
+        "compra": "Compra",
         "estado_pedido": "Estado"
     })
 
