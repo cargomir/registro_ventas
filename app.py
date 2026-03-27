@@ -306,7 +306,7 @@ def construir_compra(fila):
     return ", ".join(partes) if partes else "Sin productos"
 
 def vista_coordinador():
-    st.markdown("## 📋 Pedidos pendientes")
+    st.markdown(f"## 📋 Pedidos pendientes ({len(pendientes)})")
 
     df = leer_ventas()
 
@@ -336,7 +336,6 @@ def vista_coordinador():
     pendientes["compra"] = pendientes.apply(construir_compra, axis=1)
 
     cantidad_pendientes = len(pendientes)
-    st.metric("Pedidos pendientes", cantidad_pendientes)
 
     # Dataframe a mostrar
     df_mostrar = pendientes[[
@@ -382,8 +381,7 @@ def vista_coordinador():
     st.markdown("")  # pequeño espacio
 
     col1, col2 = st.columns([3, 1])
-    with col1:
-        st.metric("Pedidos pendientes", len(pendientes))
+    
     with col2:
         if st.button("🔄 Actualizar", type="primary"):
             st.rerun()
