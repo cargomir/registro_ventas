@@ -303,26 +303,51 @@ def vista_coordinador():
         return
 
     pendientes["numero_pedido"] = pd.to_numeric(
-    pendientes["numero_pedido"], errors="coerce"
-)
-
+        pendientes["numero_pedido"], errors="coerce"
+    )
     pendientes = pendientes.dropna(subset=["numero_pedido"]).copy()
     pendientes["numero_pedido"] = pendientes["numero_pedido"].astype(int)
 
     pendientes = pendientes.sort_values("numero_pedido", ascending=True)
 
-    for _, fila in pendientes.iterrows():
-        numero = fila["numero_pedido"]
+    # Renombrar columnas para mostrar más claro
+    pendientes_mostrar = pendientes.rename(columns={
+        "numero_pedido": "Pedido",
+        "fecha": "Fecha",
+        "hora": "Hora",
+        "vendedor": "Vendedor/a",
+        "nombre_comprador": "Comprador/a",
+        "cantidad_promo_completo_bebida": "Promos",
+        "cantidad_completos_solos": "Completos (solos)",
+        "cantidad_bebidas_solas": "Bebidas (solas)",
+        "cantidad_cafes_solos": "Cafés (solos)",
+        "cantidad_te_solos": "Tés (solos)",
+        "total_venta": "Total ($)",
+        "forma_pago": "Forma de pago",
+        "estado_pedido": "Estado"
+    })
 
-        col1, col2 = st.columns([5, 1])
+    st.dataframe(
+        pendientes_mostrar,
+        width="stretch",
+        hide_index=True
+    )
 
-        with col1:
-            st.write(f"**Pedido #{numero} - {fila['nombre_comprador']}**")
+    st.markdown("### ✅ Marcar pedido como entregado")
 
-        with col2:
-            if st.button("✅", key=f"ok_{numero}"):
-                marcar_pedido_entregado(numero)
-                st.rerun()
+    pedido_seleccionado = st.selectbox(
+        "Selecciona el número de pedido",
+        options=pendientes["numero_pedido"].tolist()
+    )
+
+    if st.button("Marcar como entregado", type="primary"):
+        try:
+            marcar_pedido_entregado(pedido_seleccionado)
+            st.success(f"Pedido #{pedido_seleccionado} marcado como entregado.")
+            st.rerun()
+        except Exception as e:
+            st.error(f"No fue posible actualizar el pedido: {e}")
+            
 # ======================================================
 # INTERFAZ
 # ======================================================
