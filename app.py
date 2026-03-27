@@ -259,7 +259,7 @@ def guardar_venta(
     ws.append_row(nueva_fila, value_input_option="USER_ENTERED")
 
     leer_ventas.clear()
-    return True
+    return numero_pedido
 
 def marcar_pedido_entregado(numero_pedido):
     spreadsheet = abrir_spreadsheet()
@@ -494,7 +494,7 @@ if st.session_state.rol_actual == "vendedor":
                     st.error("Debes seleccionar una forma de pago.")
                 else:
                     try:
-                        guardar_venta(
+                        numero_pedido = guardar_venta(
                             vendedor=st.session_state.usuario_actual,
                             nombre_comprador=nombre_comprador,
                             cantidad_promo=int(cantidad_promo),
@@ -504,9 +504,9 @@ if st.session_state.rol_actual == "vendedor":
                             cantidad_cafes=int(cantidad_cafes),
                             precios=precios,
                             forma_pago=forma_pago,
-                            #observaciones=observaciones,
                         )
-                        st.success("Venta guardada correctamente.")
+
+                        st.success(f"Pedido #{numero_pedido} guardado correctamente")
 
                         st.session_state.ultimo_nombre = nombre_comprador
                         st.session_state.ultimo_total = total_estimado
