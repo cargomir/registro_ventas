@@ -335,6 +335,9 @@ def vista_coordinador():
     # Construir resumen
     pendientes["compra"] = pendientes.apply(construir_compra, axis=1)
 
+    cantidad_pendientes = len(pendientes)
+    st.metric("Pedidos pendientes", cantidad_pendientes)
+
     # Dataframe a mostrar
     df_mostrar = pendientes[[
         "numero_pedido",
@@ -378,8 +381,9 @@ def vista_coordinador():
 
     st.markdown("")  # pequeño espacio
 
-    col1, col2 = st.columns([4, 1])
-
+    col1, col2 = st.columns([3, 1])
+    with col1:
+        st.metric("Pedidos pendientes", len(pendientes))
     with col2:
         if st.button("🔄 Actualizar", type="primary"):
             st.rerun()
