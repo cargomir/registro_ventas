@@ -257,7 +257,6 @@ def guardar_venta(
     ws = spreadsheet.worksheet(HOJA_VENTAS)
     ws.append_row(nueva_fila, value_input_option="USER_ENTERED")
 
-    leer_ventas.clear()
     return numero_pedido
 
 def marcar_pedido_entregado(numero_pedido):
@@ -276,7 +275,6 @@ def marcar_pedido_entregado(numero_pedido):
     for i, fila in enumerate(datos[1:], start=2):
         if str(fila[col_numero - 1]).strip() == str(numero_pedido).strip():
             ws.update_cell(i, col_estado, "Entregado")
-            leer_ventas.clear()
             return True
 
     raise ValueError(f"No se encontró el pedido {numero_pedido}.")
@@ -384,7 +382,6 @@ def vista_coordinador():
 
     with col2:
         if st.button("🔄 Actualizar", type="primary"):
-            leer_ventas.clear()
             st.rerun()
 
     # Ejecutar entrega
@@ -398,20 +395,6 @@ def vista_coordinador():
 
         st.success("Pedidos actualizados correctamente")
         st.rerun()
-
-        # Detectar cambios
-        pedidos_a_entregar = edited_df[edited_df["Entregar"] == True]
-
-        if not pedidos_a_entregar.empty:
-            for _, fila in pedidos_a_entregar.iterrows():
-                numero = int(fila["Pedido"])
-                try:
-                    marcar_pedido_entregado(numero)
-                except Exception as e:
-                    st.error(f"No fue posible actualizar el pedido {numero}: {e}")
-
-            st.success("Pedidos actualizados correctamente")
-            st.rerun()
             
 # ======================================================
 # INTERFAZ
