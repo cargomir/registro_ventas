@@ -472,11 +472,6 @@ if st.session_state.rol_actual == "vendedor":
 
             guardar = st.form_submit_button("💾 Guardar venta", type="primary")
 
-            mensaje_formulario = st.empty()
-            if st.session_state.mensaje_confirmacion:
-                mensaje_formulario.success(st.session_state.mensaje_confirmacion)
-                st.session_state.mensaje_confirmacion = ""
-
             nombre_mostrar = nombre_comprador if nombre_comprador else st.session_state.get("ultimo_nombre", "")
             total_mostrar = total_estimado if nombre_comprador else st.session_state.get("ultimo_total", 0)
 
@@ -484,6 +479,11 @@ if st.session_state.rol_actual == "vendedor":
                 f"<h2 style='color:#2F5FBF;'>Total a pagar ({nombre_mostrar}): ${total_mostrar:,}</h2>".replace(",", "."),
                 unsafe_allow_html=True
             )
+
+            mensaje_formulario = st.empty()
+            if st.session_state.mensaje_confirmacion:
+                mensaje_formulario.success(st.session_state.mensaje_confirmacion)
+                st.session_state.mensaje_confirmacion = ""
 
             if guardar:
                 total_items = (
