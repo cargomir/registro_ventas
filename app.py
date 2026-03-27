@@ -451,7 +451,7 @@ with tab2:
 # ======================================================
 with tab3:
     st.markdown(
-        "<h2 style='color:#FF1F1F;'>📊 Montos totales</h2>",
+        "<h2 style='color:#FF1F1F;'>📊 Ventas totales</h2>",
         unsafe_allow_html=True
     )
     if df_ventas.empty:
