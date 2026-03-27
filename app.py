@@ -296,10 +296,10 @@ button[data-baseweb="tab"][aria-selected="true"] {
 """, unsafe_allow_html=True)
 
 tab1, tab2, tab3, tab4 = st.tabs([
-    "🧾 Registro ventas",
-    "🌭 Últimas ventas",
-    "📊 Resumen ventas",
-    "💲 Consultar precios"
+    "🧾 Registro",
+    "🌭 Ventas",
+    "📊 Resumen",
+    "💲 Precios"
 ])
 
 # ======================================================
