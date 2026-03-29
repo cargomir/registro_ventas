@@ -776,8 +776,8 @@ if st.session_state.rol_actual == "vendedor":
     # ======================================================
     st.markdown("<br>", unsafe_allow_html=True)
 
-    col1, col2, col3 = st.columns([3, 1, 3])
-    with col2:
+    col1, col2, col3 = st.columns([2, 2, 2])
+    with col3:
         if st.button("🔄 Actualizar", type="primary"):
             st.cache_data.clear()
             st.rerun()
