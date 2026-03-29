@@ -771,5 +771,16 @@ if st.session_state.rol_actual == "vendedor":
             hide_index=True
         )
 
+    # ======================================================
+    # BOTÓN ACTUALIZAR GENERAL
+    # ======================================================
+    st.markdown("<div style='height: 30px;'></div>", unsafe_allow_html=True)
+
+    col1, col2, col3 = st.columns([3, 1, 3])
+    with col2:
+        if st.button("🔄 Actualizar", type="primary"):
+            st.cache_data.clear()
+            st.rerun()
+
 elif st.session_state.rol_actual == "coordinador":
     vista_coordinador()
