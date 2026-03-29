@@ -774,7 +774,7 @@ if st.session_state.rol_actual == "vendedor":
     # ======================================================
     # BOTÓN ACTUALIZAR GENERAL
     # ======================================================
-    st.markdown("<div style='height: 30px;'></div>", unsafe_allow_html=True)
+    st.markdown("<br>", unsafe_allow_html=True)
 
     col1, col2, col3 = st.columns([3, 1, 3])
     with col2:
